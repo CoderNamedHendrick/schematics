@@ -1,5 +1,5 @@
 name: schematics
-version: 1.0.0-dev.1.2
+version: 1.0.0-dev.1.3
 homepage: https://github.com/CoderNamedHendrick/schematics
 repository: https://github.com/CoderNamedHendrick/schematics
 issue_tracker: https://github.com/CoderNamedHendrick/schematics/issues
@@ -16,8 +16,14 @@ screenshots:
   - description: 'schematic diagram on mobile'
     path: screenshots/mobile_sc1.png
 
+  - description: 'schematic diagram on mobile 2'
+    path: screenshots/mobile_sc2.png
+
   - description: 'schematic diagram on desktop'
     path: screenshots/desktop_sc1.png
+
+  - description: 'schematic diagram on desktop 2'
+    path: screenshots/desktop_sc2.png
 
 
 environment:

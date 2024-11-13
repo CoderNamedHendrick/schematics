@@ -1,3 +1,7 @@
+## 1.0.0-dev.1.3
+
+- allow entrance arc to be customisable
+
 ## 1.0.0-dev.1.2
 
 - added documentation

@@ -52,6 +52,9 @@ final class Block {
   /// The style for the entrance label text.
   final TextStyle? entranceLabelStyle;
 
+  /// Entrance opening radius
+  final double? entranceOpeningRadius;
+
   /// The label for the block.
   final String blockLabel;
 
@@ -82,6 +85,7 @@ final class Block {
     this.position,
     List<BlockOpening> openings = const [],
     this.alignmentToPreviousBlock,
+    this.entranceOpeningRadius,
   }) : _openings = openings;
 
   List<BlockOpening> get effectiveOpenings => [

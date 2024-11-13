@@ -102,7 +102,7 @@ class SchemaBlockPainter extends CustomPainter {
         ..lineTo(blockWidth, size.height)
         ..lineTo(blockWidth, size.height * 0.75)
         ..arcToPoint(Offset(blockWidth, size.height * 0.25),
-            radius: const Radius.circular(22))
+            radius: Radius.circular(block.entranceOpeningRadius ?? 8))
         ..lineTo(blockWidth, 0)
         ..close();
     } else {

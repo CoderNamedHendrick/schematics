@@ -321,6 +321,9 @@ extension on Block {
       hideFenceBorder: hideFenceBorder,
       entranceLabel: entranceLabel,
       entranceLabelStyle: entranceLabelStyle,
+      entranceOpeningRadius: entranceOpeningRadius != null
+          ? entranceOpeningRadius! * axesScale.openingScale
+          : null,
       blockLabelStyle: blockLabelStyle,
       blockColor: blockColor,
       position: position != null
