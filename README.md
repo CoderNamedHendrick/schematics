@@ -19,7 +19,11 @@ A customisable and responsive Flutter widget for creating and displaying schemat
 
 ## Features
 
+- 2d schematic map/diagram
+
 ## Usage
+
+Refer to example project [here](https://github.com/CoderNamedHendrick/schematics/tree/main/example).
 
 ## Installation
 
