@@ -6,7 +6,6 @@ A customisable and responsive Flutter widget for creating and displaying schemat
 ![Stars](https://img.shields.io/github/stars/codernamedhendrick/schematics?label=Stars&style=flat)
 ![Watchers](https://img.shields.io/github/watchers/codernamedhendrick/schematics?label=Watchers&style=flat)
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/codernamedhendrick/schematics?label=Latest&style=flat)
 ![GitHub issues](https://img.shields.io/github/issues/codernamedhendrick/schematics?label=Issues&style=flat)
 ![GitHub License](https://img.shields.io/github/license/codernamedhendrick/schematics?label=Licence&style=flat)
 

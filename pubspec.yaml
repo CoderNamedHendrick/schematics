@@ -1,14 +1,14 @@
 name: schematics
-version: 1.0.0-dev.1
+version: 1.0.0-dev.1.1
 homepage: https://github.com/CoderNamedHendrick/schematics
 repository: https://github.com/CoderNamedHendrick/schematics
 issue_tracker: https://github.com/CoderNamedHendrick/schematics/issues
 topics:
   - schematics
-  - 2d diagrams
+  - diagrams
   - drawing
-  - 2d map
-  - floor plan
+  - maps
+  - floor-plan
 
 description: 'Draw 2d schematics diagrams'
 
@@ -21,7 +21,7 @@ screenshots:
 
 
 environment:
-  sdk: '>=3.1.0'
+  sdk: ^3.1.0
   flutter: ">=1.17.0"
 
 dependencies:
