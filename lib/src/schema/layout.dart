@@ -150,7 +150,14 @@ class _SchemaLayoutDelegate extends MultiChildLayoutDelegate {
 
       blockLayouts.add(
         (
-          identifier: block.blockLabel,
+          identifier: () {
+            if (block.identifier != null) return block.identifier!;
+
+            if (block.blockLabel != null) return block.blockLabel!;
+
+            throw AssertionError(
+                'Ensure block identifier or block label is passed for block');
+          }(),
           start: childOffset,
           end: Offset(childOffset.dx + currentSize.width,
               childOffset.dy + currentSize.height),

@@ -5,9 +5,9 @@ import 'alignment.dart';
 import 'tooling.dart';
 
 /// Represents a layout area for a block in the schematic.
-typedef BlockLayoutArea = ({
+typedef BlockLayoutArea<T extends Object> = ({
   /// Unique identifier for the block layout area.
-  String identifier,
+  T identifier,
 
   /// Starting position of the block layout area.
   Offset start,
@@ -35,7 +35,10 @@ typedef BlockOpening = ({
 });
 
 /// [Block] represents a schematic block with specific dimensions, color, and optional labels.
-final class Block {
+final class Block<T extends Object> {
+  /// Unique block identifier
+  final T? identifier;
+
   ///
   /// The width of the block.
   final double width;
@@ -56,7 +59,7 @@ final class Block {
   final double? entranceOpeningRadius;
 
   /// The label for the block.
-  final String blockLabel;
+  final String? blockLabel;
 
   /// The style for the block label text.
   final TextStyle? blockLabelStyle;
@@ -74,12 +77,13 @@ final class Block {
   final BlockAlignment? alignmentToPreviousBlock;
 
   const Block({
+    this.identifier,
     this.width = 100,
     this.height = 100,
     this.hideFenceBorder = HideFenceBorder.none,
     this.entranceLabel,
     this.entranceLabelStyle,
-    required this.blockLabel,
+    this.blockLabel,
     this.blockLabelStyle,
     this.blockColor = Colors.purpleAccent,
     this.position,
@@ -115,6 +119,7 @@ final class Block {
     if (identical(this, other)) return true;
 
     return other is Block &&
+        other.identifier == identifier &&
         other.width == width &&
         other.height == height &&
         other.hideFenceBorder == hideFenceBorder &&
@@ -131,7 +136,8 @@ final class Block {
 
   @override
   int get hashCode {
-    return width.hashCode ^
+    return identifier.hashCode ^
+        width.hashCode ^
         height.hashCode ^
         hideFenceBorder.hashCode ^
         entranceLabel.hashCode ^
@@ -147,6 +153,6 @@ final class Block {
 
   @override
   String toString() {
-    return 'Block(width: $width, height: $height, hideFenceBorder: $hideFenceBorder, entranceLabel: $entranceLabel, entranceLabelStyle: $entranceLabelStyle, entranceOpeningRadius: $entranceOpeningRadius, blockLabel: $blockLabel, blockLabelStyle: $blockLabelStyle, blockColor: $blockColor, position: $position, openings: $effectiveOpenings, alignment: $alignmentToPreviousBlock)';
+    return 'Block(identifier: $identifier, width: $width, height: $height, hideFenceBorder: $hideFenceBorder, entranceLabel: $entranceLabel, entranceLabelStyle: $entranceLabelStyle, entranceOpeningRadius: $entranceOpeningRadius, blockLabel: $blockLabel, blockLabelStyle: $blockLabelStyle, blockColor: $blockColor, position: $position, openings: $effectiveOpenings, alignment: $alignmentToPreviousBlock)';
   }
 }

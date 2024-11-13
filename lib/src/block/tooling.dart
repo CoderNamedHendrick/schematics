@@ -28,7 +28,7 @@ enum HideFenceBorder {
 /// Extension on List<BlockLayoutArea> to provide additional functionality.
 extension BlockLayouts on List<BlockLayoutArea> {
   /// Gets the layout for a given identifier.
-  BlockLayoutArea getLayoutForIdentifier(String identifier) {
+  BlockLayoutArea getLayoutForIdentifier(identifier) {
     return firstWhere((layout) => layout.identifier == identifier);
   }
 

@@ -315,6 +315,7 @@ extension on Block {
   /// - Returns: A new [Block] with the adjusted dimensions, position, and openings.
   Block alignedBlock(AxesScale axesScale) {
     return Block(
+      identifier: identifier,
       blockLabel: blockLabel,
       width: width * axesScale.xScale,
       height: height * axesScale.yScale,

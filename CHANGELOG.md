@@ -1,3 +1,7 @@
+## 1.0.0-dev.1.5
+
+- introduced identifier for blocks
+
 ## 1.0.0-dev.1.4
 
 - fixed bug with entrance radius
