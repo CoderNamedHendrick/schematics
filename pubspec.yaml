@@ -1,0 +1,36 @@
+name: schematics
+version: 1.0.0-dev.1
+homepage: https://github.com/CoderNamedHendrick/schematics
+repository: https://github.com/CoderNamedHendrick/schematics
+issue_tracker: https://github.com/CoderNamedHendrick/schematics/issues
+topics:
+  - schematics
+  - 2d diagrams
+  - drawing
+  - 2d map
+  - floor plan
+
+description: 'Draw 2d schematics diagrams'
+
+screenshots:
+  - description: 'This screenshot shows schematics package in action on a desktop app. 
+  It shows the schematic diagram resized as the window is resized.'
+    path: screenshots/desktop_view.gif
+  - description: 'This screenshot shows schematics package in action on a mobile app.'
+    path: screenshots/mobile_view.gif
+
+
+environment:
+  sdk: '>=3.1.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
