@@ -96,13 +96,28 @@ class SchemaBlockPainter extends CustomPainter {
     // paint inside
     late Path path;
     if (entranceLabelExists) {
+      final start = () {
+        if (block.entranceOpeningRadius == null) {
+          return size.height * 0.75;
+        }
+
+        return (size.height + (block.entranceOpeningRadius! * 2)) / 2;
+      }();
       path = Path()
         ..moveTo(0, 0)
         ..lineTo(0, size.height)
         ..lineTo(blockWidth, size.height)
-        ..lineTo(blockWidth, size.height * 0.75)
-        ..arcToPoint(Offset(blockWidth, size.height * 0.25),
-            radius: Radius.circular(block.entranceOpeningRadius ?? 8))
+        ..lineTo(blockWidth, start)
+        ..arcToPoint(
+          Offset(blockWidth, () {
+            if (block.entranceOpeningRadius == null) {
+              return size.height * 0.25;
+            }
+
+            return start - (block.entranceOpeningRadius! * 2);
+          }()),
+          radius: Radius.circular(block.entranceOpeningRadius ?? 22),
+        )
         ..lineTo(blockWidth, 0)
         ..close();
     } else {

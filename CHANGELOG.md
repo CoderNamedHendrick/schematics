@@ -1,3 +1,7 @@
+## 1.0.0-dev.1.4
+
+- fixed bug with entrance radius
+
 ## 1.0.0-dev.1.3
 
 - allow entrance arc to be customisable

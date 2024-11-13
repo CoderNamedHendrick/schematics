@@ -35,6 +35,7 @@ class SchemaFour extends StatelessWidget {
             entranceLabel: 'ENTRANCE',
             blockLabel: 'Room 1',
             blockColor: const Color(0xffffd3bf),
+            entranceOpeningRadius: 90,
             openings: [
               Offset(constraints.maxWidth * 0.8, largeRoomHeight).opening,
               Offset(constraints.maxWidth * 0.15, largeRoomHeight).opening,
