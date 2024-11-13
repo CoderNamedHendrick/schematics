@@ -124,6 +124,7 @@ final class Block {
         other.blockLabelStyle == blockLabelStyle &&
         other.blockColor == blockColor &&
         other.position == position &&
+        other.entranceOpeningRadius == entranceOpeningRadius &&
         listEquals(other._openings, _openings) &&
         other.alignmentToPreviousBlock == alignmentToPreviousBlock;
   }
@@ -139,12 +140,13 @@ final class Block {
         blockLabelStyle.hashCode ^
         blockColor.hashCode ^
         position.hashCode ^
+        entranceOpeningRadius.hashCode ^
         _openings.hashCode ^
         alignmentToPreviousBlock.hashCode;
   }
 
   @override
   String toString() {
-    return 'Block(width: $width, height: $height, hideFenceBorder: $hideFenceBorder, entranceLabel: $entranceLabel, entranceLabelStyle: $entranceLabelStyle, blockLabel: $blockLabel, blockLabelStyle: $blockLabelStyle, blockColor: $blockColor, position: $position, openings: $effectiveOpenings, alignment: $alignmentToPreviousBlock)';
+    return 'Block(width: $width, height: $height, hideFenceBorder: $hideFenceBorder, entranceLabel: $entranceLabel, entranceLabelStyle: $entranceLabelStyle, entranceOpeningRadius: $entranceOpeningRadius, blockLabel: $blockLabel, blockLabelStyle: $blockLabelStyle, blockColor: $blockColor, position: $position, openings: $effectiveOpenings, alignment: $alignmentToPreviousBlock)';
   }
 }
