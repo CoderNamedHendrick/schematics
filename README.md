@@ -39,6 +39,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Screenshots 📱
 
-<img src="screenshots/desktop_view.gif" alt="desktop screenshot of schematics">
+<img src="screenshots/desktop_view.gif" alt="desktop screenshot of schematics" height="300">
 
 <img src="screenshots/mobile_view.gif" alt="mobile screenshot of schematics">
