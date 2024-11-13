@@ -4,17 +4,37 @@ import 'package:flutter/material.dart';
 import '../block/block.dart';
 import '../grid/grid.dart';
 import 'block_painter.dart';
-import 'layout.dart';
 
-typedef BlockLayoutCallback = void Function(List<BlockLayoutArea> areas);
-typedef GridCallback = void Function(Grid<int> grid);
-
-typedef InitiateAxesScaleCallback = AxesScale Function(
-    BoxConstraints blockAreaConstraints);
+part 'layout.dart';
 
 AxesScale _kDefaultAxesScaleCallback([_]) => kDefaultAxesScale;
 
+/// Callback function type for block layout.
+typedef BlockLayoutCallback = void Function(List<BlockLayoutArea> areas);
+
+/// Callback function type for grid updates.
+typedef GridCallback = void Function(Grid<int> grid);
+
+/// Callback function type for initiating axes scale.
+typedef InitiateAxesScaleCallback = AxesScale Function(
+    BoxConstraints blockAreaConstraints);
+
+/// A widget that displays a schema with blocks
+/// A widget that displays a schema with blocks.
+///
+/// This widget is responsible for rendering the blocks passed to it. It also allows
+/// the client to set the axes scales, the size of the schema, and various other parameters.
 class SchemaWidget extends StatelessWidget {
+  /// Creates a [SchemaWidget].
+  ///
+  /// - [blocks]: The list of blocks to display in the schema.
+  /// - [schemaSize]: The size of the schema. Defaults to [kDefaultSchemaSize].
+  /// - [onBlocksLayout]: Callback for when the blocks are laid out.
+  /// - [onGridUpdate]: Callback for when the grid is updated.
+  /// - [showGrid]: Whether to show the grid. Defaults to `false`.
+  /// - [showBlocks]: Whether to show the blocks. Defaults to `false`.
+  /// - [layoutDirection]: The direction of the layout. Defaults to [LayoutDirection.bottomLeft].
+  /// - [onInitiateAxesScale]: Callback for initiating the axes scale. Defaults to [_kDefaultAxesScaleCallback].
   const SchemaWidget({
     super.key,
     required this.blocks,
@@ -27,13 +47,28 @@ class SchemaWidget extends StatelessWidget {
     this.onInitiateAxesScale = _kDefaultAxesScaleCallback,
   });
 
+  /// The list of blocks to display in the schema.
   final List<Block> blocks;
+
+  /// The size of the schema.
   final SchemaSize schemaSize;
+
+  /// Callback for when the blocks are laid out.
   final BlockLayoutCallback? onBlocksLayout;
+
+  /// Callback for when the grid is updated.
   final GridCallback? onGridUpdate;
+
+  /// Whether to show the grid.
   final bool showGrid;
+
+  /// Whether to show the blocks.
   final bool showBlocks;
+
+  /// The direction of the layout.
   final LayoutDirection layoutDirection;
+
+  /// Callback for initiating the axes scale.
   final InitiateAxesScaleCallback onInitiateAxesScale;
 
   @override
@@ -114,6 +149,7 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
           .map((block) => block.alignedBlock(widget.axesScale))
           .toList();
       alignedSchemaSize = widget.schemaSize.alignedSchema(widget.axesScale);
+      return;
     }
 
     if (!listEquals(widget.blocks, oldWidget.blocks)) {
@@ -137,7 +173,7 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
         showGrid: widget.showGrid,
       ),
       child: CustomMultiChildLayout(
-        delegate: SchemaLayoutDelegate(
+        delegate: _SchemaLayoutDelegate(
           blocks: alignedBlocks,
           schemaSize: alignedSchemaSize,
           layoutDirection: widget.layoutDirection,
@@ -165,6 +201,10 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
     );
   }
 
+  /// Fills the grid with the block layout area.
+  ///
+  /// This function updates the grid with the block layout area provided. It calculates
+  /// the grid cells that the block occupies and updates the grid state accordingly.
   void _fillBlock(BlockLayoutArea area) {
     final cellSize = alignedSchemaSize.cellSize;
     Grid<int> newGrid = Grid.make(
@@ -233,6 +273,12 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
     widget.onGridUpdate?.call(grid);
   }
 
+  /// Converts a [Color] to a cell state represented by an integer.
+  /// The cell state is derived from the hue of the color, adjusted by -20.
+  /// If the adjusted hue is less than 20, it wraps around to the range [340, 360).
+  ///
+  /// - Parameter color: The [Color] to convert.
+  /// - Returns: An integer representing the cell state.
   int _getCellStateFromColor(Color color) {
     int bHue = HSLColor.fromColor(color).hue.toInt() - 20;
     if (bHue < 20) {
@@ -244,6 +290,13 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
 }
 
 extension on SchemaSize {
+  /// Aligns the [SchemaSize] based on the provided [AxesScale].
+  ///
+  /// This function adjusts the `cellSize` and `openingRadius` of the [SchemaSize]
+  /// according to the scaling factors defined in the [AxesScale].
+  ///
+  /// - Parameter axesScale: The scaling factors for the x, y, and opening dimensions.
+  /// - Returns: A new [SchemaSize] with the adjusted `cellSize` and `openingRadius`.
   SchemaSize alignedSchema(AxesScale axesScale) {
     return (
       cellSize: cellSize,
@@ -253,6 +306,13 @@ extension on SchemaSize {
 }
 
 extension on Block {
+  /// Aligns the [Block] based on the provided [AxesScale].
+  ///
+  /// This function adjusts the dimensions, position, and openings of the [Block]
+  /// according to the scaling factors defined in the [AxesScale].
+  ///
+  /// - Parameter axesScale: The scaling factors for the x, y, and opening dimensions.
+  /// - Returns: A new [Block] with the adjusted dimensions, position, and openings.
   Block alignedBlock(AxesScale axesScale) {
     return Block(
       blockLabel: blockLabel,
@@ -274,12 +334,26 @@ extension on Block {
 }
 
 extension on List<BlockOpening> {
+  /// Aligns the list of [BlockOpening]s based on the provided [AxesScale].
+  ///
+  /// This function adjusts each [BlockOpening] in the list according to the scaling
+  /// factors defined in the [AxesScale].
+  ///
+  /// - Parameter axesScale: The scaling factors for the x, y, and opening dimensions.
+  /// - Returns: A new list of [BlockOpening]s with the adjusted offset and opening size.
   List<BlockOpening> alignedOpenings(AxesScale axesScale) {
     return map((opening) => opening.alignedOpening(axesScale)).toList();
   }
 }
 
 extension on BlockOpening {
+  /// Aligns the [BlockOpening] based on the provided [AxesScale].
+  ///
+  /// This function adjusts the offset and opening size of the [BlockOpening]
+  /// according to the scaling factors defined in the [AxesScale].
+  ///
+  /// - Parameter axesScale: The scaling factors for the x, y, and opening dimensions.
+  /// - Returns: A new [BlockOpening] with the adjusted offset and opening size.
   BlockOpening alignedOpening(AxesScale axesScale) {
     return (
       offset:

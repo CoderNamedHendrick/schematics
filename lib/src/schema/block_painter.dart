@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 
 import '../block/block.dart';
 
+/// A custom painter for drawing a block within a schema.
 class SchemaBlockPainter extends CustomPainter {
+  /// The block to be painted.
   final Block block;
+
+  /// The size of the schema.
   final SchemaSize schemaSize;
 
+  /// Creates a new instance of [SchemaBlockPainter].
   const SchemaBlockPainter({required this.block, required this.schemaSize});
 
+  /// The stroke width for the fence border.
   static const double _fenceStrokeWidth = 1.5;
 
   @override
@@ -17,6 +23,7 @@ class SchemaBlockPainter extends CustomPainter {
     _drawBlock(canvas, size);
   }
 
+  /// Draws the block on the canvas.
   void _drawBlock(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = block.blockColor
@@ -166,6 +173,7 @@ class SchemaBlockPainter extends CustomPainter {
     canvas.restore();
   }
 
+  /// Generates a path with openings for the block
   Path _getPathWithOpenings(Iterable<BlockOpening> openings, Size size,
       [_AllowedEdges edges = _defaultAllowedEdges,
       double horizontalPaddingFactor = 0]) {
@@ -283,7 +291,7 @@ class SchemaBlockPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(SchemaBlockPainter oldDelegate) {
-    return oldDelegate.block != block;
+    return oldDelegate.block != block || oldDelegate.schemaSize != schemaSize;
   }
 }
 

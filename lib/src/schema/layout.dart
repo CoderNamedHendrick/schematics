@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+part of 'widget.dart';
 
-import '../block/block.dart';
-
+/// Represents the layout direction of the schematic.
 enum LayoutDirection {
   bottomLeft,
   topLeft,
@@ -10,19 +8,34 @@ enum LayoutDirection {
   topRight,
 }
 
-class SchemaLayoutDelegate extends MultiChildLayoutDelegate {
+/// A delegate for laying out blocks within a schema.
+class _SchemaLayoutDelegate extends MultiChildLayoutDelegate {
+  /// The list of blocks to be laid out.
   final List<Block> blocks;
+
+  /// Callback that is called when the blocks are laid out.
   final ValueChanged<List<BlockLayoutArea>>? onBlocksLayout;
+
+  /// The direction in which the layout should be performed.
   final LayoutDirection layoutDirection;
+
+  /// The size of the schema.
   final SchemaSize schemaSize;
 
-  SchemaLayoutDelegate({
+  /// Creates a new instance of [_SchemaLayoutDelegate].
+  ///
+  /// The [blocks] parameter specifies the list of blocks to be laid out.
+  /// The [onBlocksLayout] parameter is a callback that is called when the blocks are laid out.
+  /// The [layoutDirection] parameter specifies the direction in which the layout should be performed.
+  /// The [schemaSize] parameter specifies the size of the schema.
+  _SchemaLayoutDelegate({
     this.blocks = const [],
     this.onBlocksLayout,
     this.layoutDirection = LayoutDirection.bottomLeft,
     required this.schemaSize,
   });
 
+  /// Sums the heights of the blocks up to the specified [index].
   double _sumBlocHeightsToIndex(int index) {
     double sum = 0;
     for (int i = 0; i < index; i++) {
@@ -192,7 +205,7 @@ class SchemaLayoutDelegate extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(SchemaLayoutDelegate oldDelegate) {
+  bool shouldRelayout(_SchemaLayoutDelegate oldDelegate) {
     if (oldDelegate.layoutDirection != layoutDirection) return true;
     if (oldDelegate.schemaSize != schemaSize) return true;
     return !listEquals(oldDelegate.blocks, blocks);

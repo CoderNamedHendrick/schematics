@@ -4,28 +4,70 @@ import 'package:flutter/material.dart';
 import 'alignment.dart';
 import 'tooling.dart';
 
+/// Represents a layout area for a block in the schematic.
 typedef BlockLayoutArea = ({
+  /// Unique identifier for the block layout area.
   String identifier,
+
+  /// Starting position of the block layout area.
   Offset start,
+
+  /// Ending position of the block layout area.
   Offset end,
+
+  /// Determines which sides of the block's border should be hidden.
   HideFenceBorder hideFenceBorder,
+
+  /// Color of the block.
   Color blockColor,
+
+  /// List of openings within the block layout area.
   List<({Offset start, Offset end})> openings,
 });
 
-typedef BlockOpening = ({Offset offset, double? openingSize});
+/// Represents an opening in a block.
+typedef BlockOpening = ({
+  /// Position of the opening.
+  Offset offset,
 
+  /// Size of the opening.
+  double? openingSize
+});
+
+/// [Block] represents a schematic block with specific dimensions, color, and optional labels.
 final class Block {
+  ///
+  /// The width of the block.
   final double width;
+
+  /// The height of the block.
   final double height;
+
+  /// Determines which sides of the block's border should be hidden.
   final HideFenceBorder hideFenceBorder;
+
+  /// An optional label for the entrance of the block.
   final String? entranceLabel;
+
+  /// The style for the entrance label text.
   final TextStyle? entranceLabelStyle;
+
+  /// The label for the block.
   final String blockLabel;
+
+  /// The style for the block label text.
   final TextStyle? blockLabelStyle;
+
+  /// The color of the block.
   final Color blockColor;
+
+  /// The position of the block.
   final Offset? position;
+
+  /// A list of openings in the block.
   final List<BlockOpening> _openings;
+
+  /// The alignment of the block relative to the previous block.
   final BlockAlignment? alignmentToPreviousBlock;
 
   const Block({

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'object.dart';
 
+/// A custom painter for drawing a grid and optionally blocks within the grid.
 class GridPainter extends CustomPainter {
+  /// Creates a [GridPainter] with the given grid, cell size, and optional flags
+  /// to show the grid and blocks.
   GridPainter({
     required this.grid,
     required this.cellSize,
@@ -9,9 +12,16 @@ class GridPainter extends CustomPainter {
     this.showBlocks = false,
   });
 
+  /// The grid to be painted.
   final Grid<int> grid;
+
+  /// The size of each cell in the grid.
   final double cellSize;
+
+  /// Whether to show the grid lines.
   final bool showGrid;
+
+  /// Whether to show the blocks within the grid.
   final bool showBlocks;
 
   @override
@@ -20,6 +30,7 @@ class GridPainter extends CustomPainter {
     if (showBlocks) _paintBlocks(canvas, size);
   }
 
+  /// Paints the grid lines on the canvas.
   void _paintGrid(Canvas canvas, Size size) {
     for (int i = 0; i < grid.rows; i++) {
       for (int j = 0; j < grid.columns; j++) {
@@ -46,6 +57,7 @@ class GridPainter extends CustomPainter {
     }
   }
 
+  /// Paints the blocks within the grid on the canvas.
   void _paintBlocks(Canvas canvas, Size size) {
     for (int i = 0; i < grid.rows; i++) {
       for (int j = 0; j < grid.columns; j++) {

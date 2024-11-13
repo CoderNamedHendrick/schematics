@@ -1,5 +1,5 @@
 name: schematics
-version: 1.0.0-dev.1.1
+version: 1.0.0-dev.1.2
 homepage: https://github.com/CoderNamedHendrick/schematics
 repository: https://github.com/CoderNamedHendrick/schematics
 issue_tracker: https://github.com/CoderNamedHendrick/schematics/issues
@@ -13,11 +13,11 @@ topics:
 description: 'Draw 2d schematics diagrams'
 
 screenshots:
-  - description: 'This screenshot shows schematics package in action on a desktop app. 
-  It shows the schematic diagram resized as the window is resized.'
-    path: screenshots/desktop_view.gif
-  - description: 'This screenshot shows schematics package in action on a mobile app.'
-    path: screenshots/mobile_view.gif
+  - description: 'schematic diagram on mobile'
+    path: screenshots/mobile_sc1.png
+
+  - description: 'schematic diagram on desktop'
+    path: screenshots/desktop_sc1.png
 
 
 environment:

@@ -1,13 +1,23 @@
 import 'dart:ui' as ui;
 
+/// Enum representing the horizontal edge alignment.
 enum XEdgeAlignment { left, center, right }
 
+/// Enum representing the vertical edge alignment.
 enum YEdgeAlignment { top, center, bottom }
 
+/// Class representing the alignment of a block.
 class BlockAlignment {
+  /// The x-coordinate of the alignment.
   final double x;
+
+  /// The horizontal edge alignment.
   final XEdgeAlignment xEdgeAlignment;
+
+  /// The y-coordinate of the alignment.
   final double y;
+
+  /// The vertical edge alignment.
   final YEdgeAlignment yEdgeAlignment;
 
   const BlockAlignment(
@@ -17,16 +27,31 @@ class BlockAlignment {
     this.yEdgeAlignment = YEdgeAlignment.bottom,
   });
 
+  /// Predefined alignment for the top-left corner.
   static const topLeft = BlockAlignment(-1, -1);
+
+  /// Predefined alignment for the top-center.
   static const topCenter = BlockAlignment(0.0, -1.0);
+
+  /// Predefined alignment for the top-right corner.
   static const topRight = BlockAlignment(1.0, -1.0);
 
+  /// Predefined alignment for the center-left.
   static const centerLeft = BlockAlignment(-1.0, 0.0);
+
+  /// Predefined alignment for the center.
   static const center = BlockAlignment(0, 0);
+
+  /// Predefined alignment for the center-right.
   static const centerRight = BlockAlignment(1.0, 0);
 
+  /// Predefined alignment for the bottom-left corner.
   static const bottomLeft = BlockAlignment(-1.0, 1.0);
+
+  /// Predefined alignment for the bottom-center.
   static const bottomCenter = BlockAlignment(0.0, 1.0);
+
+  /// Predefined alignment for the bottom-right corner.
   static const bottomRight = BlockAlignment(1.0, 1.0);
 
   /// Returns the difference between two [BlockAlignment]s.
@@ -49,12 +74,12 @@ class BlockAlignment {
     return BlockAlignment(x * other, y * other);
   }
 
-  /// Divides the [Alignment] in each dimension by the given factor.
+  /// Divides the [BlockAlignment] in each dimension by the given factor.
   BlockAlignment operator /(double other) {
     return BlockAlignment(x / other, y / other);
   }
 
-  /// Integer divides the [Alignment] in each dimension by the given factor.
+  /// Integer divides the [BlockAlignment] in each dimension by the given factor.
   BlockAlignment operator ~/(double other) {
     return BlockAlignment((x ~/ other).toDouble(), (y ~/ other).toDouble());
   }
@@ -125,7 +150,9 @@ class BlockAlignment {
   String toString() => _stringify(x, y);
 }
 
+/// Extension on [BlockAlignment] to provide additional alignment functionality.
 extension BlockEdgeAlignmentX on BlockAlignment {
+  /// Aligns the block to the left edge.
   BlockAlignment get alignLeft => BlockAlignment(
         x,
         y,
@@ -133,6 +160,7 @@ extension BlockEdgeAlignmentX on BlockAlignment {
         yEdgeAlignment: yEdgeAlignment,
       );
 
+  /// Aligns the block to the horizontal center.
   BlockAlignment get alignHCenter => BlockAlignment(
         x,
         y,
@@ -140,6 +168,7 @@ extension BlockEdgeAlignmentX on BlockAlignment {
         yEdgeAlignment: yEdgeAlignment,
       );
 
+  /// Aligns the block to the right edge.
   BlockAlignment get alignRight => BlockAlignment(
         x,
         y,
@@ -147,6 +176,7 @@ extension BlockEdgeAlignmentX on BlockAlignment {
         yEdgeAlignment: yEdgeAlignment,
       );
 
+  /// Aligns the block to the top edge.
   BlockAlignment get alignTop => BlockAlignment(
         x,
         y,
@@ -154,6 +184,7 @@ extension BlockEdgeAlignmentX on BlockAlignment {
         yEdgeAlignment: YEdgeAlignment.top,
       );
 
+  /// Aligns the block to the vertical center.
   BlockAlignment get alignVCenter => BlockAlignment(
         x,
         y,
@@ -161,6 +192,7 @@ extension BlockEdgeAlignmentX on BlockAlignment {
         yEdgeAlignment: YEdgeAlignment.center,
       );
 
+  /// Aligns the block to the bottom edge.
   BlockAlignment get alignBottom => BlockAlignment(
         x,
         y,
