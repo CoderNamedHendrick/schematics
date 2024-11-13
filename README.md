@@ -2,20 +2,25 @@
 
 A customisable and responsive Flutter widget for creating and displaying schematic diagrams.
 
-[![pub package](https://img.shields.io/pub/v/schematics.svg?label=Version&style=flat)][pub]
-[![Stars](https://img.shields.io/github/stars/codernamedhendrick/schematics?label=Stars&style=flat)][repo]
-[![Watchers](https://img.shields.io/github/watchers/codernamedhendrick/schematics?label=Watchers&style=flat)][repo]
+![pub package](https://img.shields.io/pub/v/schematics.svg?label=Version&style=flat)
+![Stars](https://img.shields.io/github/stars/codernamedhendrick/schematics?label=Stars&style=flat)
+![Watchers](https://img.shields.io/github/watchers/codernamedhendrick/schematics?label=Watchers&style=flat)
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/codernamedhendrick/schematics?label=Latest&style=flat)][releases]
-[![GitHub issues](https://img.shields.io/github/issues/codernamedhendrick/schematics?label=Issues&style=flat)][issues]
-[![GitHub License](https://img.shields.io/github/license/codernamedhendrick/schematics?label=Licence&style=flat)][license]
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/codernamedhendrick/schematics?label=Latest&style=flat)
+![GitHub issues](https://img.shields.io/github/issues/codernamedhendrick/schematics?label=Issues&style=flat)
+![GitHub License](https://img.shields.io/github/license/codernamedhendrick/schematics?label=Licence&style=flat)
 
 ## Table of Content
-    - [Features](#features)
-    - [Usage](#usage)
-    - [Installation](#installation)
-    - [License](#license)
-    - [Screenshots](#screenshots)
+
+- [Features](#features)
+- [Usage](#usage)
+- [Installation](#installation)
+- [License](#license)
+- [Screenshots](#screenshots-)
+
+## Features
+
+## Usage
 
 ## Installation
 
