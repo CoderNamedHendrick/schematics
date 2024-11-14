@@ -42,18 +42,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Screenshots 📱
 
-<div>
-<img src="screenshots/mobile_sc1.png" alt="mobile screenshot 1" width="300">
-<img src="screenshots/mobile_sc2.png" alt="mobile screenshot 2" width="300">
-</div>
+![mobile screenshot 1](screenshots/mobile_sc1.png)
+![mobile screenshot 2](screenshots/mobile_sc2.png)
+![desktop screenshot 1](screenshots/desktop_sc1.png)
+![desktop screenshot 2](screenshots/desktop_sc2.png)
 
-<div>
-<img src="screenshots/desktop_sc1.png" alt="desktop screenshot 1" width="400">
-<img src="screenshots/desktop_sc2.png" alt="desktop screenshot 2" width="400"></div>
-
-<img src="screenshots/desktop_view.gif" alt="desktop screenshot of schematics" height="300">
-
-<img src="screenshots/mobile_view.gif" alt="mobile screenshot of schematics">
+![desktop screenshot/record of schematics](screenshots/desktop_view.gif)
+![mobile screenshot/record of schematics](screenshots/mobile_view.gif)
 
 ## Connect With Me
 
