@@ -1,19 +1,15 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-
-import '../block/block.dart';
+part of 'widget.dart';
 
 /// A custom painter for drawing a block within a schema.
-class SchemaBlockPainter extends CustomPainter {
+class _SchemaBlockPainter extends CustomPainter {
   /// The block to be painted.
   final Block block;
 
   /// The size of the schema.
   final SchemaSize schemaSize;
 
-  /// Creates a new instance of [SchemaBlockPainter].
-  const SchemaBlockPainter({required this.block, required this.schemaSize});
+  /// Creates a new instance of [_SchemaBlockPainter].
+  const _SchemaBlockPainter({required this.block, required this.schemaSize});
 
   /// The stroke width for the fence border.
   static const double _fenceStrokeWidth = 1.5;
@@ -26,7 +22,7 @@ class SchemaBlockPainter extends CustomPainter {
   /// Draws the block on the canvas.
   void _drawBlock(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = block.blockColor
+      ..color = block.color
       ..style = PaintingStyle.fill;
 
     final entranceLabelExists = block.entranceLabel != null;
@@ -137,7 +133,7 @@ class SchemaBlockPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeWidth = _fenceStrokeWidth;
 
-    path = switch (block.hideFenceBorder) {
+    path = switch (block.fenceBorder) {
       HideFenceBorder.all => _getPathWithOpenings(
           [],
           Size(blockWidth, size.height),
@@ -157,8 +153,8 @@ class SchemaBlockPainter extends CustomPainter {
     // render block label
     final labelPainter = TextPainter(
       text: TextSpan(
-        text: block.blockLabel,
-        style: block.blockLabelStyle ??
+        text: block.label,
+        style: block.labelStyle ??
             const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w600,
@@ -207,7 +203,7 @@ class SchemaBlockPainter extends CustomPainter {
           path.moveTo(
             0,
             edgeOpenings[i].offset.dy +
-                (edgeOpenings[i].openingSize ?? schemaSize.openingRadius),
+                (edgeOpenings[i].openingSize ?? schemaSize.opening),
           );
         }
         path.lineTo(0, size.height);
@@ -235,7 +231,7 @@ class SchemaBlockPainter extends CustomPainter {
               bottomEdgeOpenings[i].offset.dx -
                   horizontalPaddingFactor +
                   (bottomEdgeOpenings[i].openingSize ??
-                      schemaSize.openingRadius),
+                      schemaSize.opening),
               size.height);
         }
         path.lineTo(size.width, size.height);
@@ -261,7 +257,7 @@ class SchemaBlockPainter extends CustomPainter {
           path.lineTo(
               size.width,
               edgeOpenings[i].offset.dy +
-                  (edgeOpenings[i].openingSize ?? schemaSize.openingRadius));
+                  (edgeOpenings[i].openingSize ?? schemaSize.opening));
           path.moveTo(size.width, edgeOpenings[i].offset.dy);
         }
         path.lineTo(size.width, 0);
@@ -285,7 +281,7 @@ class SchemaBlockPainter extends CustomPainter {
           path.lineTo(
               topEdgeOpenings[i].offset.dx -
                   horizontalPaddingFactor +
-                  (topEdgeOpenings[i].openingSize ?? schemaSize.openingRadius),
+                  (topEdgeOpenings[i].openingSize ?? schemaSize.opening),
               0);
           path.moveTo(
               topEdgeOpenings[i].offset.dx - horizontalPaddingFactor, 0);
@@ -305,7 +301,7 @@ class SchemaBlockPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(SchemaBlockPainter oldDelegate) {
+  bool shouldRepaint(_SchemaBlockPainter oldDelegate) {
     return oldDelegate.block != block || oldDelegate.schemaSize != schemaSize;
   }
 }

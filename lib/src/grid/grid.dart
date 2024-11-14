@@ -1,4 +1,3 @@
-//GENERATED BARREL FILE 
-export 'cell.dart'; 
-export 'object.dart'; 
-export 'painter.dart'; 
+//GENERATED BARREL FILE
+export 'cell.dart';
+export 'object.dart';

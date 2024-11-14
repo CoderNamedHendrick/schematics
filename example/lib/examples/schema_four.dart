@@ -14,15 +14,15 @@ class SchemaFour extends StatelessWidget {
         layoutDirection: LayoutDirection.bottomRight,
         showBlocks: showBlockAreas.value,
         showGrid: showGridCells.value,
-        schemaSize: (cellSize: kDefaultSchemaSize.cellSize, openingRadius: 52),
+        schemaSize: SchemaSize(cell: kDefaultSchemaSize.cell, opening: 52),
         blocks: [
           Block(
             width: constraints.maxWidth,
             height: largeRoomHeight,
-            hideFenceBorder: HideFenceBorder.right,
+            fenceBorder: HideFenceBorder.right,
             entranceLabel: 'ENTRANCE',
-            blockLabel: 'Exhibition Room',
-            blockColor: const Color(0xffb6b0dd),
+            label: 'Exhibition Room',
+            color: const Color(0xffb6b0dd),
             openings: [
               Offset(constraints.maxWidth * 0.15, 0).opening,
               Offset(constraints.maxWidth * 0.8, 0).opening,
@@ -31,10 +31,10 @@ class SchemaFour extends StatelessWidget {
           Block(
             width: constraints.maxWidth,
             height: largeRoomHeight,
-            hideFenceBorder: HideFenceBorder.right,
+            fenceBorder: HideFenceBorder.right,
             entranceLabel: 'ENTRANCE',
-            blockLabel: 'Room 1',
-            blockColor: const Color(0xffffd3bf),
+            label: 'Room 1',
+            color: const Color(0xffffd3bf),
             entranceOpeningRadius: 90,
             openings: [
               Offset(constraints.maxWidth * 0.8, largeRoomHeight).opening,
@@ -45,10 +45,10 @@ class SchemaFour extends StatelessWidget {
           Block(
             width: constraints.maxWidth,
             height: largeRoomHeight,
-            hideFenceBorder: HideFenceBorder.right,
+            fenceBorder: HideFenceBorder.right,
             entranceLabel: 'Exit',
-            blockLabel: 'Room 2',
-            blockColor: const Color(0xff88cd83),
+            label: 'Room 2',
+            color: const Color(0xff88cd83),
             openings: [
               Offset(constraints.maxWidth * 0.8, largeRoomHeight).opening,
               Offset(constraints.maxWidth * 0.74, 0)
@@ -58,25 +58,25 @@ class SchemaFour extends StatelessWidget {
           Block(
             width: constraints.maxWidth * 0.082,
             height: constraints.maxHeight * 0.293,
-            hideFenceBorder: HideFenceBorder.all,
-            blockLabel: 'HALLWAY',
-            blockColor: const Color(0xffd9d0c3),
+            fenceBorder: HideFenceBorder.all,
+            label: 'HALLWAY',
+            color: const Color(0xffd9d0c3),
             position: Offset(constraints.maxWidth * 0.245, largeRoomHeight * 3),
           ),
           Block(
             width: constraints.maxWidth * 0.190,
             height: constraints.maxHeight * 0.14,
-            hideFenceBorder: HideFenceBorder.all,
-            blockLabel: 'Toilet',
-            blockColor: const Color(0xffbee673),
+            fenceBorder: HideFenceBorder.all,
+            label: 'Toilet',
+            color: const Color(0xffbee673),
             alignmentToPreviousBlock: BlockAlignment.centerRight.alignVCenter,
           ),
           Block(
             width: constraints.maxWidth * 0.638,
             height: mediumRoomHeight,
-            hideFenceBorder: HideFenceBorder.all,
-            blockLabel: 'STAIRWAY',
-            blockColor: const Color(0xffd9d9d9),
+            fenceBorder: HideFenceBorder.all,
+            label: 'STAIRWAY',
+            color: const Color(0xffd9d9d9),
             position: Offset(
               constraints.maxWidth * 0.245 + constraints.maxWidth * 0.082,
               largeRoomHeight * 3 +
@@ -87,17 +87,17 @@ class SchemaFour extends StatelessWidget {
           Block(
             width: constraints.maxWidth * 0.344,
             height: mediumRoomHeight,
-            hideFenceBorder: HideFenceBorder.all,
-            blockLabel: 'Room 3',
-            blockColor: const Color(0xffbee673),
+            fenceBorder: HideFenceBorder.all,
+            label: 'Room 3',
+            color: const Color(0xffbee673),
             alignmentToPreviousBlock: BlockAlignment.topLeft.alignTop,
           ),
           Block(
             width: constraints.maxWidth * 0.344,
             height: mediumRoomHeight,
-            hideFenceBorder: HideFenceBorder.all,
-            blockLabel: 'Room 4',
-            blockColor: const Color(0xffbbddc9),
+            fenceBorder: HideFenceBorder.all,
+            label: 'Room 4',
+            color: const Color(0xffbbddc9),
             position: Offset(
               constraints.maxWidth * 0.245 +
                   constraints.maxWidth * 0.082 +

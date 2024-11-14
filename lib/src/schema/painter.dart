@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-import 'object.dart';
+part of 'widget.dart';
 
 /// A custom painter for drawing a grid and optionally blocks within the grid.
-class GridPainter extends CustomPainter {
-  /// Creates a [GridPainter] with the given grid, cell size, and optional flags
+class _GridPainter extends CustomPainter {
+  /// Creates a [_GridPainter] with the given grid, cell size, and optional flags
   /// to show the grid and blocks.
-  GridPainter({
+  const _GridPainter({
     required this.grid,
     required this.cellSize,
     this.showGrid = false,
@@ -92,7 +91,7 @@ class GridPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    if (oldDelegate is! GridPainter) return false;
+    if (oldDelegate is! _GridPainter) return false;
 
     if (oldDelegate.grid != grid) return true;
     if (oldDelegate.cellSize != cellSize) return true;

@@ -1,3 +1,10 @@
+## 1.0.0-dev.1.6
+
+- breaking changes with API
+- made some records classes instead, namely: AxesScale, SchemaSize, BlockLayoutArea etc.
+- changed BlockLayoutArea to BlockArea
+- change some parameter names
+
 ## 1.0.0-dev.1.5
 
 - introduced identifier for blocks

@@ -4,26 +4,66 @@ import 'package:flutter/material.dart';
 import 'alignment.dart';
 import 'tooling.dart';
 
+/// opening for a block area defined by a start(0, 0) and end offset(maxWidth, maxHeight).
+typedef BlockLayoutOpening = ({Offset start, Offset end});
+
 /// Represents a layout area for a block in the schematic.
-typedef BlockLayoutArea<T extends Object> = ({
+class BlockArea<T extends Object> {
   /// Unique identifier for the block layout area.
-  T identifier,
+  final T identifier;
 
   /// Starting position of the block layout area.
-  Offset start,
+  final Offset start;
 
   /// Ending position of the block layout area.
-  Offset end,
+  final Offset end;
 
   /// Determines which sides of the block's border should be hidden.
-  HideFenceBorder hideFenceBorder,
+  final HideFenceBorder fenceBorder;
 
   /// Color of the block.
-  Color blockColor,
+  final Color blockColor;
 
   /// List of openings within the block layout area.
-  List<({Offset start, Offset end})> openings,
-});
+  final List<BlockLayoutOpening> openings;
+
+  const BlockArea({
+    required this.identifier,
+    required this.start,
+    required this.end,
+    required this.fenceBorder,
+    required this.blockColor,
+    this.openings = const [],
+  });
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is BlockArea &&
+        other.identifier == identifier &&
+        other.start == start &&
+        other.end == end &&
+        other.fenceBorder == fenceBorder &&
+        other.blockColor == blockColor &&
+        listEquals(other.openings, openings);
+  }
+
+  @override
+  int get hashCode {
+    return identifier.hashCode ^
+        start.hashCode ^
+        end.hashCode ^
+        fenceBorder.hashCode ^
+        blockColor.hashCode ^
+        openings.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'BlockLayoutArea(identifier: $identifier, start: $start, end: $end, hideFenceBorder: $fenceBorder, blockColor: $blockColor, openings: $openings)';
+  }
+}
 
 /// Represents an opening in a block.
 typedef BlockOpening = ({
@@ -35,6 +75,7 @@ typedef BlockOpening = ({
 });
 
 /// [Block] represents a schematic block with specific dimensions, color, and optional labels.
+/// where type[T] is the unique identifier for the block.
 final class Block<T extends Object> {
   /// Unique block identifier
   final T? identifier;
@@ -47,7 +88,7 @@ final class Block<T extends Object> {
   final double height;
 
   /// Determines which sides of the block's border should be hidden.
-  final HideFenceBorder hideFenceBorder;
+  final HideFenceBorder fenceBorder;
 
   /// An optional label for the entrance of the block.
   final String? entranceLabel;
@@ -59,13 +100,13 @@ final class Block<T extends Object> {
   final double? entranceOpeningRadius;
 
   /// The label for the block.
-  final String? blockLabel;
+  final String? label;
 
   /// The style for the block label text.
-  final TextStyle? blockLabelStyle;
+  final TextStyle? labelStyle;
 
   /// The color of the block.
-  final Color blockColor;
+  final Color color;
 
   /// The position of the block.
   final Offset? position;
@@ -80,12 +121,12 @@ final class Block<T extends Object> {
     this.identifier,
     this.width = 100,
     this.height = 100,
-    this.hideFenceBorder = HideFenceBorder.none,
+    this.fenceBorder = HideFenceBorder.none,
     this.entranceLabel,
     this.entranceLabelStyle,
-    this.blockLabel,
-    this.blockLabelStyle,
-    this.blockColor = Colors.purpleAccent,
+    this.label,
+    this.labelStyle,
+    this.color = Colors.purpleAccent,
     this.position,
     List<BlockOpening> openings = const [],
     this.alignmentToPreviousBlock,
@@ -94,7 +135,7 @@ final class Block<T extends Object> {
 
   List<BlockOpening> get effectiveOpenings => [
         ..._openings,
-        ...?switch (hideFenceBorder) {
+        ...?switch (fenceBorder) {
           HideFenceBorder.right => [
               Offset(width, .005).oSize(height),
             ],
@@ -122,12 +163,12 @@ final class Block<T extends Object> {
         other.identifier == identifier &&
         other.width == width &&
         other.height == height &&
-        other.hideFenceBorder == hideFenceBorder &&
+        other.fenceBorder == fenceBorder &&
         other.entranceLabel == entranceLabel &&
         other.entranceLabelStyle == entranceLabelStyle &&
-        other.blockLabel == blockLabel &&
-        other.blockLabelStyle == blockLabelStyle &&
-        other.blockColor == blockColor &&
+        other.label == label &&
+        other.labelStyle == labelStyle &&
+        other.color == color &&
         other.position == position &&
         other.entranceOpeningRadius == entranceOpeningRadius &&
         listEquals(other._openings, _openings) &&
@@ -139,12 +180,12 @@ final class Block<T extends Object> {
     return identifier.hashCode ^
         width.hashCode ^
         height.hashCode ^
-        hideFenceBorder.hashCode ^
+        fenceBorder.hashCode ^
         entranceLabel.hashCode ^
         entranceLabelStyle.hashCode ^
-        blockLabel.hashCode ^
-        blockLabelStyle.hashCode ^
-        blockColor.hashCode ^
+        label.hashCode ^
+        labelStyle.hashCode ^
+        color.hashCode ^
         position.hashCode ^
         entranceOpeningRadius.hashCode ^
         _openings.hashCode ^
@@ -153,6 +194,6 @@ final class Block<T extends Object> {
 
   @override
   String toString() {
-    return 'Block(identifier: $identifier, width: $width, height: $height, hideFenceBorder: $hideFenceBorder, entranceLabel: $entranceLabel, entranceLabelStyle: $entranceLabelStyle, entranceOpeningRadius: $entranceOpeningRadius, blockLabel: $blockLabel, blockLabelStyle: $blockLabelStyle, blockColor: $blockColor, position: $position, openings: $effectiveOpenings, alignment: $alignmentToPreviousBlock)';
+    return 'Block(identifier: $identifier, width: $width, height: $height, fence: $fenceBorder, entranceLabel: $entranceLabel, entranceLabelStyle: $entranceLabelStyle, entranceOpeningRadius: $entranceOpeningRadius, label: $label, labelStyle: $labelStyle, blockColor: $color, position: $position, openings: $effectiveOpenings, alignment: $alignmentToPreviousBlock)';
   }
 }

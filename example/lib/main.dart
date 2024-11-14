@@ -156,24 +156,23 @@ class SchemaOne extends StatelessWidget {
     return SchemaWidget(
       showBlocks: showBlockAreas.value,
       showGrid: showGridCells.value,
-      onInitiateAxesScale: (constraints) => (
-        xScale: constraints.maxWidth * 0.00188,
-        yScale: constraints.maxHeight * 0.001885,
-        openingScale: constraints.maxWidth * 0.00188
-      ),
+      onInitiateAxesScale: (constraints) => AxesScale(
+          x: constraints.maxWidth * 0.00188,
+          y: constraints.maxHeight * 0.001885,
+          opening: constraints.maxWidth * 0.00188),
       blocks: [
         Block(
-          blockLabel: 'Veranda',
+          label: 'Veranda',
           height: 200,
           width: 80,
-          hideFenceBorder: HideFenceBorder.left,
+          fenceBorder: HideFenceBorder.left,
           openings: [const Offset(80, 30).opening],
         ),
         Block(
           width: 250,
           height: 200,
-          blockLabel: 'Sitting room',
-          blockColor: const Color(0xffb6b0dd),
+          label: 'Sitting room',
+          color: const Color(0xffb6b0dd),
           position: const Offset(80, 0),
           openings: [
             const Offset(0, 30).opening,
@@ -182,10 +181,10 @@ class SchemaOne extends StatelessWidget {
           ],
         ),
         Block(
-          blockLabel: 'Bedroom 1',
+          label: 'Bedroom 1',
           width: 200,
           height: 180,
-          blockColor: const Color(0xffb6b0dd),
+          color: const Color(0xffb6b0dd),
           position: const Offset(330, 0),
           openings: [
             const Offset(0, 0.01).opening,
@@ -193,19 +192,19 @@ class SchemaOne extends StatelessWidget {
           ],
         ),
         Block(
-          blockLabel: 'Toilet 1',
+          label: 'Toilet 1',
           width: 200,
           height: 70,
           position: const Offset(330, 180),
           openings: [const Offset(30, 70).opening],
         ),
         Block(
-          blockLabel: 'Corridor',
+          label: 'Corridor',
           height: 330,
           width: 60,
-          blockColor: const Color(0xffb6bdcc),
+          color: const Color(0xffb6bdcc),
           position: const Offset(270, 200),
-          hideFenceBorder: HideFenceBorder.bottom,
+          fenceBorder: HideFenceBorder.bottom,
           openings: [
             const Offset(0, 280).opening,
             const Offset(0, 100).opening,
@@ -213,45 +212,45 @@ class SchemaOne extends StatelessWidget {
           ],
         ),
         Block(
-          blockLabel: 'Master\'s toilet',
+          label: 'Master\'s toilet',
           width: 200,
           height: 80,
           position: const Offset(330, 250),
           openings: [const Offset(30, 0).opening],
         ),
         Block(
-          blockLabel: 'Master\'s bedroom',
+          label: 'Master\'s bedroom',
           height: 200,
           width: 200,
           position: const Offset(330, 330),
-          blockColor: const Color(0xffb6b0dd),
+          color: const Color(0xffb6b0dd),
           openings: [
             const Offset(0, 130).opening,
             const Offset(30, 200).opening,
           ],
         ),
         Block(
-          blockLabel: 'Kitchen',
+          label: 'Kitchen',
           height: 120,
           width: 190,
           position: const Offset(80, 200),
-          blockColor: const Color(0xff88cd83),
+          color: const Color(0xff88cd83),
           openings: [
             const Offset(190, 70).opening,
           ],
         ),
         Block(
-          blockLabel: 'Toilet 2',
+          label: 'Toilet 2',
           width: 190,
           height: 60,
           position: const Offset(80, 320),
           openings: [const Offset(140, 0).opening],
         ),
         Block(
-          blockLabel: 'Bedroom 2',
+          label: 'Bedroom 2',
           width: 190,
           height: 150,
-          blockColor: const Color(0xffb6b0dd),
+          color: const Color(0xffb6b0dd),
           position: const Offset(80, 380),
           openings: [
             const Offset(140, 150).opening,

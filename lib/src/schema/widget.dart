@@ -1,16 +1,21 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../block/block.dart';
 import '../grid/grid.dart';
-import 'block_painter.dart';
 
 part 'layout.dart';
+
+part 'painter.dart';
+
+part 'block_painter.dart';
 
 AxesScale _kDefaultAxesScaleCallback([_]) => kDefaultAxesScale;
 
 /// Callback function type for block layout.
-typedef BlockLayoutCallback = void Function(List<BlockLayoutArea> areas);
+typedef BlockLayoutCallback = void Function(List<BlockArea> areas);
 
 /// Callback function type for grid updates.
 typedef GridCallback = void Function(Grid<int> grid);
@@ -122,8 +127,8 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
   late List<Block> alignedBlocks;
   late SchemaSize alignedSchemaSize;
   late Grid<int> grid = Grid.make(
-    widget.layoutConstraints.maxHeight ~/ alignedSchemaSize.cellSize,
-    widget.layoutConstraints.maxWidth ~/ alignedSchemaSize.cellSize,
+    widget.layoutConstraints.maxHeight ~/ alignedSchemaSize.cell,
+    widget.layoutConstraints.maxWidth ~/ alignedSchemaSize.cell,
     0,
   );
 
@@ -141,8 +146,8 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
     super.didUpdateWidget(oldWidget);
     if (widget.layoutConstraints != oldWidget.layoutConstraints) {
       grid = Grid.make(
-        widget.layoutConstraints.maxHeight ~/ alignedSchemaSize.cellSize,
-        widget.layoutConstraints.maxWidth ~/ alignedSchemaSize.cellSize,
+        widget.layoutConstraints.maxHeight ~/ alignedSchemaSize.cell,
+        widget.layoutConstraints.maxWidth ~/ alignedSchemaSize.cell,
         0,
       );
       alignedBlocks = widget.blocks
@@ -166,9 +171,9 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      foregroundPainter: GridPainter(
+      foregroundPainter: _GridPainter(
         grid: grid,
-        cellSize: alignedSchemaSize.cellSize,
+        cellSize: alignedSchemaSize.cell,
         showBlocks: widget.showBlocks,
         showGrid: widget.showGrid,
       ),
@@ -190,7 +195,7 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
           (i) => LayoutId(
             id: i,
             child: CustomPaint(
-              painter: SchemaBlockPainter(
+              painter: _SchemaBlockPainter(
                 block: alignedBlocks[i],
                 schemaSize: alignedSchemaSize,
               ),
@@ -205,8 +210,8 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
   ///
   /// This function updates the grid with the block layout area provided. It calculates
   /// the grid cells that the block occupies and updates the grid state accordingly.
-  void _fillBlock(BlockLayoutArea area) {
-    final cellSize = alignedSchemaSize.cellSize;
+  void _fillBlock(BlockArea area) {
+    final cellSize = alignedSchemaSize.cell;
     Grid<int> newGrid = Grid.make(
         widget.layoutConstraints.maxHeight ~/ cellSize,
         widget.layoutConstraints.maxWidth ~/ cellSize,
@@ -228,7 +233,7 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
 
         // deal with edges
         if (leftEdge || rightEdge || topEdge || bottomEdge) {
-          if (area.hideFenceBorder != HideFenceBorder.all) {
+          if (area.fenceBorder != HideFenceBorder.all) {
             final openingsGridPoints = area.openings.map((opening) {
               final startTouchColumn = (opening.start.dx / cellSize).floor();
               final endTouchColumn = (opening.end.dx / cellSize).floor();
@@ -298,9 +303,9 @@ extension on SchemaSize {
   /// - Parameter axesScale: The scaling factors for the x, y, and opening dimensions.
   /// - Returns: A new [SchemaSize] with the adjusted `cellSize` and `openingRadius`.
   SchemaSize alignedSchema(AxesScale axesScale) {
-    return (
-      cellSize: cellSize,
-      openingRadius: axesScale.openingScale * openingRadius,
+    return SchemaSize(
+      cell: cell,
+      opening: axesScale.opening * opening,
     );
   }
 }
@@ -316,20 +321,20 @@ extension on Block {
   Block alignedBlock(AxesScale axesScale) {
     return Block(
       identifier: identifier,
-      blockLabel: blockLabel,
-      width: width * axesScale.xScale,
-      height: height * axesScale.yScale,
-      hideFenceBorder: hideFenceBorder,
+      label: label,
+      width: width * axesScale.x,
+      height: height * axesScale.y,
+      fenceBorder: fenceBorder,
       entranceLabel: entranceLabel,
       entranceLabelStyle: entranceLabelStyle,
       entranceOpeningRadius: entranceOpeningRadius != null
-          ? entranceOpeningRadius! * axesScale.openingScale
+          ? entranceOpeningRadius! * axesScale.opening
           : null,
-      blockLabelStyle: blockLabelStyle,
-      blockColor: blockColor,
+      labelStyle: labelStyle,
+      color: color,
       position: position != null
           ? Offset(
-              position!.dx * axesScale.xScale, position!.dy * axesScale.yScale)
+              position!.dx * axesScale.x, position!.dy * axesScale.y)
           : null,
       openings: openings.alignedOpenings(axesScale),
       alignmentToPreviousBlock: alignmentToPreviousBlock,
@@ -361,9 +366,9 @@ extension on BlockOpening {
   BlockOpening alignedOpening(AxesScale axesScale) {
     return (
       offset:
-          Offset(offset.dx * axesScale.xScale, offset.dy * axesScale.yScale),
+          Offset(offset.dx * axesScale.x, offset.dy * axesScale.y),
       openingSize:
-          openingSize != null ? openingSize! * axesScale.openingScale : null,
+          openingSize != null ? openingSize! * axesScale.opening : null,
     );
   }
 }

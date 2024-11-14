@@ -14,7 +14,7 @@ class _SchemaLayoutDelegate extends MultiChildLayoutDelegate {
   final List<Block> blocks;
 
   /// Callback that is called when the blocks are laid out.
-  final ValueChanged<List<BlockLayoutArea>>? onBlocksLayout;
+  final ValueChanged<List<BlockArea>>? onBlocksLayout;
 
   /// The direction in which the layout should be performed.
   final LayoutDirection layoutDirection;
@@ -46,7 +46,7 @@ class _SchemaLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    final blockLayouts = <BlockLayoutArea>[];
+    final blockLayouts = <BlockArea>[];
     for (int i = 0; i < blocks.length; i++) {
       final block = blocks[i];
       final childId = i;
@@ -149,11 +149,11 @@ class _SchemaLayoutDelegate extends MultiChildLayoutDelegate {
       final childOffset = Offset(xOffset, yOffset);
 
       blockLayouts.add(
-        (
+        BlockArea(
           identifier: () {
             if (block.identifier != null) return block.identifier!;
 
-            if (block.blockLabel != null) return block.blockLabel!;
+            if (block.label != null) return block.label!;
 
             throw AssertionError(
                 'Ensure block identifier or block label is passed for block');
@@ -161,8 +161,8 @@ class _SchemaLayoutDelegate extends MultiChildLayoutDelegate {
           start: childOffset,
           end: Offset(childOffset.dx + currentSize.width,
               childOffset.dy + currentSize.height),
-          hideFenceBorder: block.hideFenceBorder,
-          blockColor: block.blockColor,
+          fenceBorder: block.fenceBorder,
+          blockColor: block.color,
           openings: block.effectiveOpenings
               .asMap()
               .map((index, openingPosition) {
@@ -170,7 +170,7 @@ class _SchemaLayoutDelegate extends MultiChildLayoutDelegate {
                 final startY = childOffset.dy + openingPosition.offset.dy;
 
                 final openingSize =
-                    openingPosition.openingSize ?? schemaSize.openingRadius;
+                    openingPosition.openingSize ?? schemaSize.opening;
                 late Offset start;
                 late Offset end;
 
@@ -193,9 +193,9 @@ class _SchemaLayoutDelegate extends MultiChildLayoutDelegate {
                 } // if is at bottom edge
                 else {
                   start = Offset(
-                      startX - blockStartFromEnd, startY - schemaSize.cellSize);
+                      startX - blockStartFromEnd, startY - schemaSize.cell);
                   end = Offset(startX + openingSize - blockStartFromEnd,
-                      startY - schemaSize.cellSize);
+                      startY - schemaSize.cell);
                 }
 
                 return MapEntry(index, (start: start, end: end));
@@ -206,6 +206,11 @@ class _SchemaLayoutDelegate extends MultiChildLayoutDelegate {
       );
 
       positionChild(childId, childOffset);
+    }
+
+    final identifiers = blockLayouts.map((block) => block.identifier);
+    if (identifiers.toSet().length != identifiers.length) {
+      throw FlutterError('Block identifiers must be unique');
     }
 
     onBlocksLayout?.call(blockLayouts);

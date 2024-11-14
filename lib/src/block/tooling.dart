@@ -5,15 +5,64 @@ import 'entity.dart';
 const _kOpeningRadius = 32.0;
 const _kCellSize = 8.0;
 
-const kDefaultSchemaSize =
-    (cellSize: _kCellSize, openingRadius: _kOpeningRadius);
-const kDefaultAxesScale = (xScale: 1.0, yScale: 1.0, openingScale: 1.0);
+const kDefaultSchemaSize = SchemaSize();
+const kDefaultAxesScale = AxesScale();
 
 /// Represents the size of a schema with cell size and opening radius.
-typedef SchemaSize = ({double cellSize, double openingRadius});
+final class SchemaSize {
+  /// The size of each cell in the grid.
+  final double cell;
+
+  /// The radius of the opening.
+  final double opening;
+
+  const SchemaSize({this.cell = _kCellSize, this.opening = _kOpeningRadius});
+
+  @override
+  int get hashCode => Object.hash(cell, opening);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SchemaSize &&
+        other.cell == cell &&
+        other.opening == opening;
+  }
+}
 
 /// Represents the scale of axes with x, y, and opening scales.
-typedef AxesScale = ({double xScale, double yScale, double openingScale});
+final class AxesScale {
+  /// The scale of the x-axis.
+  final double x;
+
+  /// The scale of the y-axis.
+  final double y;
+
+  /// The scale of the opening.
+  /// The opening scale is used to adjust the size of the opening in the block.
+  /// Opening is advised to be same scale as the x-axis.
+  final double opening;
+
+  const AxesScale({
+    this.x = 1.0,
+    this.y = 1.0,
+    this.opening = 1.0,
+  });
+
+  @override
+  int get hashCode => Object.hash(x, y, opening);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is AxesScale &&
+        other.x == x &&
+        other.y == y &&
+        other.opening == opening;
+  }
+}
 
 /// Enum representing which sides of the block's border should be hidden.
 enum HideFenceBorder {
@@ -26,9 +75,9 @@ enum HideFenceBorder {
 }
 
 /// Extension on List<BlockLayoutArea> to provide additional functionality.
-extension BlockLayouts on List<BlockLayoutArea> {
+extension BlockLayouts on List<BlockArea> {
   /// Gets the layout for a given identifier.
-  BlockLayoutArea getLayoutForIdentifier(identifier) {
+  BlockArea getLayoutForIdentifier(identifier) {
     return firstWhere((layout) => layout.identifier == identifier);
   }
 

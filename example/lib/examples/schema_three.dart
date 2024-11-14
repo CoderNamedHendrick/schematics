@@ -10,28 +10,28 @@ class SchemaThree extends StatelessWidget {
     return SchemaWidget(
       showBlocks: showBlockAreas.value,
       showGrid: showGridCells.value,
-      onInitiateAxesScale: (constraints) => (
-      xScale: constraints.maxWidth * 0.00148,
-      yScale: constraints.maxHeight * 0.001885,
-      openingScale: constraints.maxWidth * 0.00148
+      onInitiateAxesScale: (constraints) => AxesScale(
+        x: constraints.maxWidth * 0.00148,
+        y: constraints.maxHeight * 0.001885,
+        opening: constraints.maxWidth * 0.00148,
       ),
       blocks: [
         const Block(
-          blockLabel: 'First block',
+          label: 'First block',
           width: 400,
           position: Offset(100, 300),
         ),
         const Block(
-          blockLabel: 'Second block',
+          label: 'Second block',
           height: 200,
           alignmentToPreviousBlock: BlockAlignment.topRight,
         ),
         Block(
-          blockLabel: 'Third block',
+          label: 'Third block',
           alignmentToPreviousBlock: BlockAlignment.centerLeft.alignRight,
         ),
         Block(
-          blockLabel: 'Fourth block',
+          label: 'Fourth block',
           alignmentToPreviousBlock: BlockAlignment.topLeft.alignRight,
         ),
       ],
