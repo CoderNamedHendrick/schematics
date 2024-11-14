@@ -42,11 +42,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Screenshots 📱
 
-![mobile screenshot 1](screenshots/mobile_sc1.png)
-![mobile screenshot 2](screenshots/mobile_sc2.png)
-![desktop screenshot 1](screenshots/desktop_sc1.png)
-![desktop screenshot 2](screenshots/desktop_sc2.png)
-
 ![desktop screenshot/record of schematics](screenshots/desktop_view.gif)
 ![mobile screenshot/record of schematics](screenshots/mobile_view.gif)
 
