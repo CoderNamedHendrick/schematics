@@ -19,6 +19,9 @@ screenshots:
   - description: 'schematic diagram on mobile 2'
     path: screenshots/mobile_sc2.png
 
+  - description: 'schematic diagram on mobile 3'
+    path: screenshots/mobile_sc3.png
+
   - description: 'schematic diagram on desktop'
     path: screenshots/desktop_sc1.png
 

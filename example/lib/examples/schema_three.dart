@@ -8,12 +8,14 @@ class SchemaThree extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SchemaWidget(
-      showBlocks: showBlockAreas.value,
-      showGrid: showGridCells.value,
-      onInitiateAxesScale: (constraints) => AxesScale(
-        x: constraints.maxWidth * 0.00148,
-        y: constraints.maxHeight * 0.001885,
-        opening: constraints.maxWidth * 0.00148,
+      config: SchemaConfig(
+        showBlocks: showBlockAreas.value,
+        showGrid: showGridCells.value,
+        initiateAxesScale: (constraints) => AxesScale(
+          x: constraints.maxWidth * 0.00148,
+          y: constraints.maxHeight * 0.001885,
+          opening: constraints.maxWidth * 0.00148,
+        ),
       ),
       blocks: [
         const Block(

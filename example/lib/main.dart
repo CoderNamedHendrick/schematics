@@ -154,12 +154,15 @@ class SchemaOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SchemaWidget(
-      showBlocks: showBlockAreas.value,
-      showGrid: showGridCells.value,
-      onInitiateAxesScale: (constraints) => AxesScale(
+      config: SchemaConfig(
+        showBlocks: showBlockAreas.value,
+        showGrid: showGridCells.value,
+        initiateAxesScale: (constraints) => AxesScale(
           x: constraints.maxWidth * 0.00188,
           y: constraints.maxHeight * 0.001885,
-          opening: constraints.maxWidth * 0.00188),
+          opening: constraints.maxWidth * 0.00188,
+        ),
+      ),
       blocks: [
         Block(
           label: 'Veranda',

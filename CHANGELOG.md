@@ -3,6 +3,7 @@
 - removed entranceLabel, entranceLabelStyle, entranceLabelRadius from `Block` class, use arc openings instead.
 - introduced arc openings for blocks. They work exactly like openings
   but are arcs.
+- breaking change: moved schemaSize, showGrid, showBlocks, layoutDirection and onInitiateAxes to SchemaConfig
 
 ## 1.0.0-dev.1.7
 

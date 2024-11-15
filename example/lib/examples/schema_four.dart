@@ -11,16 +11,17 @@ class SchemaFour extends StatelessWidget {
       final largeRoomHeight = constraints.maxHeight * 0.200;
       final mediumRoomHeight = constraints.maxHeight * 0.09;
       return SchemaWidget(
-        layoutDirection: LayoutDirection.bottomRight,
-        showBlocks: showBlockAreas.value,
-        showGrid: showGridCells.value,
-        schemaSize: SchemaSize(cell: kDefaultSchemaSize.cell, opening: 52),
+        config: SchemaConfig(
+          layoutDirection: LayoutDirection.bottomRight,
+          showBlocks: showBlockAreas.value,
+          showGrid: showGridCells.value,
+          size: SchemaSize(cell: kDefaultSchemaSize.cell, opening: 52),
+        ),
         blocks: [
           Block(
             width: constraints.maxWidth,
             height: largeRoomHeight,
             fenceBorder: HideFenceBorder.right,
-            // entranceLabel: 'ENTRANCE',
             label: 'Exhibition Room',
             color: const Color(0xffb6b0dd),
             openings: [
@@ -28,60 +29,45 @@ class SchemaFour extends StatelessWidget {
               Offset(constraints.maxWidth * 0.8, 0).opening,
             ],
             arcOpenings: [
-              const Offset(0, 20)
-                  .arcSize(20)
-                  .withFullOpening(true)
-                  .withLabel('Exit'),
-              const Offset(0, 80)
-                  .arcOpening
-                  .withFullOpening(false)
-                  .withLabel('Emergency Exit'),
-              Offset(100, largeRoomHeight).arcOpening.withLabel('Entrance'),
-              Offset(300, largeRoomHeight)
-                  .arcSize(40)
-                  .withLabel('Second Entrance'),
-              Offset(450, largeRoomHeight)
-                  .arcOpening
-                  .withFullOpening(false)
-                  .withLabel('Exit'),
-              Offset(constraints.maxWidth, 80).arcOpening.withLabel('Entrance'),
-              Offset(constraints.maxWidth, 147.5)
-                  .arcSize(20)
-                  .withFullOpening(false)
-                  .withLabel('Exit'),
-              const Offset(80, 0).arcOpening.withLabel('Entrance'),
-              const Offset(400, 0)
-                  .arcSize(40)
-                  .withFullOpening(false)
-                  .withLabel('Exit'),
+              Offset(constraints.maxWidth, largeRoomHeight / 2 + 45)
+                  .arcSize(45)
+                  .withLabel('ENTRANCE'),
             ],
           ),
           Block(
             width: constraints.maxWidth,
             height: largeRoomHeight,
             fenceBorder: HideFenceBorder.right,
-            // entranceLabel: 'ENTRANCE',
             label: 'Room 1',
             color: const Color(0xffffd3bf),
-            // entranceOpeningRadius: 90,
             fenceStrokeWidth: 15,
             openings: [
               Offset(constraints.maxWidth * 0.8, largeRoomHeight).opening,
               Offset(constraints.maxWidth * 0.15, largeRoomHeight).opening,
               Offset(constraints.maxWidth * 0.8, 0).opening,
             ],
+            arcOpenings: [
+              Offset(constraints.maxWidth, largeRoomHeight / 2 + 45)
+                  .arcSize(45)
+                  .withLabel('ENTRANCE'),
+            ],
           ),
           Block(
             width: constraints.maxWidth,
             height: largeRoomHeight,
             fenceBorder: HideFenceBorder.right,
-            // entranceLabel: 'Exit',
             label: 'Room 2',
             color: const Color(0xff88cd83),
             openings: [
               Offset(constraints.maxWidth * 0.8, largeRoomHeight).opening,
-              Offset(constraints.maxWidth * 0.74, 0)
+              Offset(constraints.maxWidth * 0.673, 0)
                   .oSize(constraints.maxWidth * 0.082),
+            ],
+            arcOpenings: [
+              Offset(constraints.maxWidth, largeRoomHeight / 2 + 52 / 2)
+                  .arcOpening
+                  .withFullOpening(false)
+                  .withLabel('Exit'),
             ],
           ),
           Block(

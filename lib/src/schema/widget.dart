@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:schematics/src/schema/config.dart';
 
 import '../block/block.dart';
 import '../grid/grid.dart';
@@ -12,17 +13,11 @@ part 'painter.dart';
 
 part 'block_painter.dart';
 
-AxesScale _kDefaultAxesScaleCallback([_]) => kDefaultAxesScale;
-
 /// Callback function type for block layout.
 typedef BlockLayoutCallback = void Function(List<BlockArea> areas);
 
 /// Callback function type for grid updates.
 typedef GridCallback = void Function(Grid<int> grid);
-
-/// Callback function type for initiating axes scale.
-typedef InitiateAxesScaleCallback = AxesScale Function(
-    BoxConstraints blockAreaConstraints);
 
 /// A widget that displays a schema with blocks
 /// A widget that displays a schema with blocks.
@@ -32,31 +27,24 @@ typedef InitiateAxesScaleCallback = AxesScale Function(
 class SchemaWidget extends StatelessWidget {
   /// Creates a [SchemaWidget].
   ///
+  /// - [config]: Configuration for the schema. Defaults to [SchemaConfig].
   /// - [blocks]: The list of blocks to display in the schema.
-  /// - [schemaSize]: The size of the schema. Defaults to [kDefaultSchemaSize].
   /// - [onBlocksLayout]: Callback for when the blocks are laid out.
   /// - [onGridUpdate]: Callback for when the grid is updated.
-  /// - [showGrid]: Whether to show the grid. Defaults to `false`.
-  /// - [showBlocks]: Whether to show the blocks. Defaults to `false`.
-  /// - [layoutDirection]: The direction of the layout. Defaults to [LayoutDirection.bottomLeft].
   /// - [onInitiateAxesScale]: Callback for initiating the axes scale. Defaults to [_kDefaultAxesScaleCallback].
   const SchemaWidget({
     super.key,
+    this.config = const SchemaConfig(),
     required this.blocks,
-    this.schemaSize = kDefaultSchemaSize,
     this.onBlocksLayout,
     this.onGridUpdate,
-    this.showGrid = false,
-    this.showBlocks = false,
-    this.layoutDirection = LayoutDirection.bottomLeft,
-    this.onInitiateAxesScale = _kDefaultAxesScaleCallback,
   });
+
+  /// Configuration for the schema.
+  final SchemaConfig config;
 
   /// The list of blocks to display in the schema.
   final List<Block> blocks;
-
-  /// The size of the schema.
-  final SchemaSize schemaSize;
 
   /// Callback for when the blocks are laid out.
   final BlockLayoutCallback? onBlocksLayout;
@@ -64,32 +52,20 @@ class SchemaWidget extends StatelessWidget {
   /// Callback for when the grid is updated.
   final GridCallback? onGridUpdate;
 
-  /// Whether to show the grid.
-  final bool showGrid;
-
-  /// Whether to show the blocks.
-  final bool showBlocks;
-
-  /// The direction of the layout.
-  final LayoutDirection layoutDirection;
-
-  /// Callback for initiating the axes scale.
-  final InitiateAxesScaleCallback onInitiateAxesScale;
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         return _SchemaWidget(
           blocks: blocks,
-          schemaSize: schemaSize,
-          axesScale: onInitiateAxesScale(constraints),
+          schemaSize: config.size,
+          axesScale: config.initiateAxesScale(constraints),
           layoutConstraints: constraints,
           onBlocksLayout: onBlocksLayout,
           onGridUpdate: onGridUpdate,
-          showGrid: showGrid,
-          showBlocks: showBlocks,
-          layoutDirection: layoutDirection,
+          showGrid: config.showGrid,
+          showBlocks: config.showBlocks,
+          layoutDirection: config.layoutDirection,
         );
       },
     );

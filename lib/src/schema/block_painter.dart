@@ -78,6 +78,7 @@ class _SchemaBlockPainter extends CustomPainter {
     canvas.save();
     // render block label
     final labelPainter = TextPainter(
+      textAlign: block.labelAlign ?? TextAlign.center,
       text: TextSpan(
         text: block.label,
         style: block.labelStyle ??

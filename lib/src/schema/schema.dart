@@ -1,2 +1,3 @@
-//GENERATED BARREL FILE 
+//GENERATED BARREL FILE
 export 'widget.dart';
+export 'config.dart';

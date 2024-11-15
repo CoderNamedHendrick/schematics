@@ -8,14 +8,15 @@ class SchemaTwo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SchemaWidget(
-      layoutDirection: LayoutDirection.topLeft,
-      schemaSize: SchemaSize(cell: kDefaultSchemaSize.cell, opening: 25),
-      showBlocks: showBlockAreas.value,
-      showGrid: showGridCells.value,
-      onInitiateAxesScale: (constraints) => AxesScale(
-        x: constraints.maxWidth * 0.00249,
-        y: constraints.maxHeight * 0.002216,
-        opening: constraints.maxWidth * 0.00249
+      config: SchemaConfig(
+        layoutDirection: LayoutDirection.topLeft,
+        size: SchemaSize(cell: kDefaultSchemaSize.cell, opening: 25),
+        showBlocks: showBlockAreas.value,
+        showGrid: showGridCells.value,
+        initiateAxesScale: (constraints) => AxesScale(
+            x: constraints.maxWidth * 0.00249,
+            y: constraints.maxHeight * 0.002216,
+            opening: constraints.maxWidth * 0.00249),
       ),
       blocks: [
         Block(

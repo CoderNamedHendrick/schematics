@@ -160,6 +160,9 @@ final class Block<T extends Object> {
   /// The style for the block label text.
   final TextStyle? labelStyle;
 
+  /// The alignment for the block label text.
+  final TextAlign? labelAlign;
+
   /// The color of the block.
   final Color color;
 
@@ -185,6 +188,7 @@ final class Block<T extends Object> {
     this.fenceBorder = HideFenceBorder.none,
     this.label,
     this.labelStyle,
+    this.labelAlign,
     this.color = Colors.purpleAccent,
     this.position,
     List<BlockOpening> openings = const [],
@@ -238,6 +242,7 @@ final class Block<T extends Object> {
         other.fenceBorder == fenceBorder &&
         other.label == label &&
         other.labelStyle == labelStyle &&
+        other.labelAlign == labelAlign &&
         other.color == color &&
         other.position == position &&
         listEquals(other._openings, _openings) &&
@@ -254,6 +259,7 @@ final class Block<T extends Object> {
         fenceBorder.hashCode ^
         label.hashCode ^
         labelStyle.hashCode ^
+        labelAlign.hashCode ^
         color.hashCode ^
         position.hashCode ^
         _openings.hashCode ^
@@ -264,6 +270,6 @@ final class Block<T extends Object> {
 
   @override
   String toString() {
-    return 'Block(identifier: $identifier, width: $width, height: $height, fence: $fenceBorder, label: $label, labelStyle: $labelStyle, blockColor: $color, position: $position, openings: $effectiveOpenings, arcOpenings: $arcOpenings, alignment: $alignmentToPreviousBlock, fenceStrokeWidth: $fenceStrokeWidth)';
+    return 'Block(identifier: $identifier, width: $width, height: $height, fence: $fenceBorder, label: $label, labelStyle: $labelStyle, labelAlign: $labelAlign, blockColor: $color, position: $position, openings: $effectiveOpenings, arcOpenings: $arcOpenings, alignment: $alignmentToPreviousBlock, fenceStrokeWidth: $fenceStrokeWidth)';
   }
 }
