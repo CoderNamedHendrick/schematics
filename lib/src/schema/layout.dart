@@ -174,28 +174,22 @@ class _SchemaLayoutDelegate extends MultiChildLayoutDelegate {
                 late Offset start;
                 late Offset end;
 
-                final blockStartFromEnd =
-                    (block.entranceLabel?.isNotEmpty ?? false) ? 25.0 : 0.0;
                 // if is at left edge
                 if (openingPosition.offset.dx == 0) {
                   start = Offset(startX, startY);
                   end = Offset(startX, startY + openingSize);
                 } // if is at right edge
-                else if (openingPosition.offset.dx - blockStartFromEnd ==
-                    block.width) {
+                else if (openingPosition.offset.dx == block.width) {
                   start = Offset(startX, startY);
                   end = Offset(startX, startY + openingSize);
                 } // if is at top edge
                 else if (openingPosition.offset.dy == 0) {
-                  start = Offset(startX - blockStartFromEnd, startY);
-                  end =
-                      Offset(startX + openingSize - blockStartFromEnd, startY);
+                  start = Offset(startX, startY);
+                  end = Offset(startX + openingSize, startY);
                 } // if is at bottom edge
                 else {
-                  start = Offset(
-                      startX - blockStartFromEnd, startY - schemaSize.cell);
-                  end = Offset(startX + openingSize - blockStartFromEnd,
-                      startY - schemaSize.cell);
+                  start = Offset(startX, startY - schemaSize.cell);
+                  end = Offset(startX + openingSize, startY - schemaSize.cell);
                 }
 
                 return MapEntry(index, (start: start, end: end));

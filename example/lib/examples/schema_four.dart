@@ -20,22 +20,51 @@ class SchemaFour extends StatelessWidget {
             width: constraints.maxWidth,
             height: largeRoomHeight,
             fenceBorder: HideFenceBorder.right,
-            entranceLabel: 'ENTRANCE',
+            // entranceLabel: 'ENTRANCE',
             label: 'Exhibition Room',
             color: const Color(0xffb6b0dd),
             openings: [
               Offset(constraints.maxWidth * 0.15, 0).opening,
               Offset(constraints.maxWidth * 0.8, 0).opening,
             ],
+            arcOpenings: [
+              const Offset(0, 20)
+                  .arcSize(20)
+                  .withFullOpening(true)
+                  .withLabel('Exit'),
+              const Offset(0, 80)
+                  .arcOpening
+                  .withFullOpening(false)
+                  .withLabel('Emergency Exit'),
+              Offset(100, largeRoomHeight).arcOpening.withLabel('Entrance'),
+              Offset(300, largeRoomHeight)
+                  .arcSize(40)
+                  .withLabel('Second Entrance'),
+              Offset(450, largeRoomHeight)
+                  .arcOpening
+                  .withFullOpening(false)
+                  .withLabel('Exit'),
+              Offset(constraints.maxWidth, 80).arcOpening.withLabel('Entrance'),
+              Offset(constraints.maxWidth, 147.5)
+                  .arcSize(20)
+                  .withFullOpening(false)
+                  .withLabel('Exit'),
+              const Offset(80, 0).arcOpening.withLabel('Entrance'),
+              const Offset(400, 0)
+                  .arcSize(40)
+                  .withFullOpening(false)
+                  .withLabel('Exit'),
+            ],
           ),
           Block(
             width: constraints.maxWidth,
             height: largeRoomHeight,
             fenceBorder: HideFenceBorder.right,
-            entranceLabel: 'ENTRANCE',
+            // entranceLabel: 'ENTRANCE',
             label: 'Room 1',
             color: const Color(0xffffd3bf),
-            entranceOpeningRadius: 90,
+            // entranceOpeningRadius: 90,
+            fenceStrokeWidth: 15,
             openings: [
               Offset(constraints.maxWidth * 0.8, largeRoomHeight).opening,
               Offset(constraints.maxWidth * 0.15, largeRoomHeight).opening,
@@ -46,7 +75,7 @@ class SchemaFour extends StatelessWidget {
             width: constraints.maxWidth,
             height: largeRoomHeight,
             fenceBorder: HideFenceBorder.right,
-            entranceLabel: 'Exit',
+            // entranceLabel: 'Exit',
             label: 'Room 2',
             color: const Color(0xff88cd83),
             openings: [

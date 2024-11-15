@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 import 'entity.dart';
 
@@ -106,4 +106,53 @@ extension BlockOffsetUtilsX on Offset {
 
   /// Converts the offset to a BlockOpening with a specified size.
   BlockOpening oSize(double space) => (offset: this, openingSize: space);
+
+  BlockArcOpening get arcOpening => BlockArcOpening(
+        offset: this,
+        radius: null,
+        isFullOpening: true,
+        label: null,
+        labelStyle: null,
+        labelAlign: null,
+      );
+
+  BlockArcOpening arcSize(double radius) => BlockArcOpening(
+        offset: this,
+        radius: radius,
+        isFullOpening: true,
+        label: null,
+        labelStyle: null,
+        labelAlign: null,
+      );
+}
+
+extension BlockArcUtilsX on BlockArcOpening {
+  BlockArcOpening withLabel(String labelText,
+          {TextStyle? style, TextAlign? textAlign}) =>
+      BlockArcOpening(
+        offset: offset,
+        radius: radius,
+        isFullOpening: isFullOpening,
+        label: labelText,
+        labelStyle: style,
+        labelAlign: textAlign,
+      );
+
+  BlockArcOpening withRadius(double arcRadius) => BlockArcOpening(
+        offset: offset,
+        radius: arcRadius,
+        isFullOpening: isFullOpening,
+        label: label,
+        labelStyle: labelStyle,
+        labelAlign: labelAlign,
+      );
+
+  BlockArcOpening withFullOpening(bool isFullOpening) => BlockArcOpening(
+        offset: offset,
+        radius: radius,
+        isFullOpening: isFullOpening,
+        label: label,
+        labelStyle: labelStyle,
+        labelAlign: labelAlign,
+      );
 }

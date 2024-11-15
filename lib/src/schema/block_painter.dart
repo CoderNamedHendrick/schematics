@@ -11,9 +11,6 @@ class _SchemaBlockPainter extends CustomPainter {
   /// Creates a new instance of [_SchemaBlockPainter].
   const _SchemaBlockPainter({required this.block, required this.schemaSize});
 
-  /// The stroke width for the fence border.
-  static const double _fenceStrokeWidth = 1.5;
-
   @override
   void paint(Canvas canvas, Size size) {
     _drawBlock(canvas, size);
@@ -25,56 +22,19 @@ class _SchemaBlockPainter extends CustomPainter {
       ..color = block.color
       ..style = PaintingStyle.fill;
 
-    final entranceLabelExists = block.entranceLabel != null;
-    const textHeightFactor = 20.0;
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: block.entranceLabel ?? '',
-        style: block.entranceLabelStyle ??
-            const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-              fontSize: 12,
-            ),
-      ),
-      textDirection: TextDirection.ltr,
-    );
-
-    textPainter.layout();
-
-    // render entrance label
-    if (entranceLabelExists) {
-      canvas.save();
-      canvas.rotate(_getRadFromDeg(-90));
-      textPainter.paint(
-        canvas,
-        Offset(-(size.height + textPainter.width) / 2,
-            size.width - textHeightFactor),
-      );
-
-      canvas.restore();
-    }
-
-    // 5 is padding between entrance label and block
-    final blockStartFromEnd =
-        entranceLabelExists ? textHeightFactor + 5.0 : 0.0;
-    final blockWidth = size.width - blockStartFromEnd;
-
     assert(() {
       final openingPositionAligned = () {
         return block.effectiveOpenings
             .map((opening) => opening.offset)
             .map((openingPosition) {
           // opening position must be aligned correctly at the horizontal edges of the block
-          if (openingPosition.dx == 0 ||
-              openingPosition.dx - blockStartFromEnd == blockWidth) {
+          if (openingPosition.dx == 0 || openingPosition.dx == size.width) {
             return openingPosition.dy >= 0 && openingPosition.dy <= size.height;
           }
 
           // opening position must be aligned correctly at the vertical edges of the block
           if (openingPosition.dy == 0 || openingPosition.dy == size.height) {
-            return openingPosition.dx >= 0 &&
-                openingPosition.dx - blockStartFromEnd <= blockWidth;
+            return openingPosition.dx >= 0 && openingPosition.dx <= size.width;
           }
 
           return false;
@@ -90,40 +50,7 @@ class _SchemaBlockPainter extends CustomPainter {
     }());
 
     // paint inside
-    late Path path;
-    if (entranceLabelExists) {
-      final start = () {
-        if (block.entranceOpeningRadius == null) {
-          return size.height * 0.75;
-        }
-
-        return (size.height + (block.entranceOpeningRadius! * 2)) / 2;
-      }();
-      path = Path()
-        ..moveTo(0, 0)
-        ..lineTo(0, size.height)
-        ..lineTo(blockWidth, size.height)
-        ..lineTo(blockWidth, start)
-        ..arcToPoint(
-          Offset(blockWidth, () {
-            if (block.entranceOpeningRadius == null) {
-              return size.height * 0.25;
-            }
-
-            return start - (block.entranceOpeningRadius! * 2);
-          }()),
-          radius: Radius.circular(block.entranceOpeningRadius ?? 22),
-        )
-        ..lineTo(blockWidth, 0)
-        ..close();
-    } else {
-      path = Path()
-        ..moveTo(0, 0)
-        ..lineTo(0, size.height)
-        ..lineTo(blockWidth, size.height)
-        ..lineTo(blockWidth, 0)
-        ..close();
-    }
+    Path path = _blockPathWithArcs(block.arcOpenings, size, canvas);
     canvas.drawPath(path, paint);
 
     // paint border
@@ -131,19 +58,18 @@ class _SchemaBlockPainter extends CustomPainter {
       ..color = Colors.black
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = _fenceStrokeWidth;
+      ..strokeWidth = block.fenceStrokeWidth;
 
     path = switch (block.fenceBorder) {
       HideFenceBorder.all => _getPathWithOpenings(
           [],
-          Size(blockWidth, size.height),
+          size,
           (left: false, right: false, top: false, bottom: false),
         ),
       _ => _getPathWithOpenings(
           block.effectiveOpenings,
-          Size(blockWidth, size.height),
+          size,
           _defaultAllowedEdges,
-          blockStartFromEnd,
         ),
     };
 
@@ -166,22 +92,276 @@ class _SchemaBlockPainter extends CustomPainter {
 
     labelPainter.layout();
     // render block label
-    if (labelPainter.width > blockWidth) {
+    if (labelPainter.width > size.width) {
       canvas.rotate(_getRadFromDeg(-90));
       labelPainter.paint(
         canvas,
         Offset(-(size.height + labelPainter.width) / 2,
-            (blockWidth - labelPainter.height) / 2),
+            (size.width - labelPainter.height) / 2),
       );
     } else {
       labelPainter.paint(
         canvas,
-        Offset((blockWidth - labelPainter.width) / 2,
+        Offset((size.width - labelPainter.width) / 2,
             (size.height - labelPainter.height) / 2),
       );
     }
 
     canvas.restore();
+  }
+
+  Path _blockPathWithArcs(
+      Iterable<BlockArcOpening> openings, Size size, Canvas canvas) {
+    final path = Path()..moveTo(0, 0);
+    final leftArcOpenings = openings
+        .where((opening) => opening.offset.dx == 0)
+        .toList()
+      ..sort((a, b) => a.offset.dy.compareTo(b.offset.dy));
+
+    if (leftArcOpenings.isNotEmpty) {
+      for (final opening in leftArcOpenings) {
+        final openingRadius = opening.radius ?? (schemaSize.opening / 2);
+        path.lineTo(0, opening.offset.dy);
+        path.arcTo(
+          Rect.fromLTWH(
+            -openingRadius,
+            opening.offset.dy + (opening.isFullOpening ? 0 : openingRadius / 2),
+            openingRadius * 2,
+            openingRadius * 2,
+          ),
+          -pi / 2,
+          opening.isFullOpening ? pi : pi / 2,
+          false,
+        );
+        path.lineTo(
+          0,
+          opening.offset.dy +
+              (opening.isFullOpening ? openingRadius : openingRadius * 1.5),
+        );
+
+        if (opening.label != null) {
+          final textPainter = TextPainter(
+            textAlign: opening.labelAlign ?? TextAlign.center,
+            text: TextSpan(
+              text: opening.label!,
+              style: opening.labelStyle ??
+                  const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 10,
+                  ),
+            ),
+            textDirection: TextDirection.ltr,
+          );
+
+          textPainter.layout(maxWidth: openingRadius * 2);
+
+          canvas.save();
+          canvas.rotate(_getRadFromDeg(90));
+          textPainter.paint(
+            canvas,
+            Offset(
+              opening.offset.dy + openingRadius - textPainter.width / 2,
+              opening.labelMargin ?? 0,
+            ),
+          );
+          canvas.restore();
+        }
+      }
+
+      path.lineTo(0, size.height);
+    } else {
+      path.lineTo(0, size.height);
+    }
+
+    final bottomArcOpenings = block.arcOpenings
+        .where((opening) => opening.offset.dy == size.height)
+        .toList()
+      ..sort((a, b) => a.offset.dx.compareTo(b.offset.dx));
+
+    if (bottomArcOpenings.isNotEmpty) {
+      for (final opening in bottomArcOpenings) {
+        final openingRadius = opening.radius ?? (schemaSize.opening / 2);
+        path.lineTo(opening.offset.dx, size.height);
+        path.arcTo(
+          Rect.fromLTWH(
+            opening.offset.dx + (opening.isFullOpening ? 0 : openingRadius / 2),
+            size.height - openingRadius,
+            openingRadius * 2,
+            openingRadius * 2,
+          ),
+          -pi,
+          opening.isFullOpening ? pi : pi / 2,
+          false,
+        );
+        path.lineTo(
+            opening.offset.dx +
+                (opening.isFullOpening ? openingRadius : openingRadius * 1.5),
+            size.height);
+
+        if (opening.label != null) {
+          final textPainter = TextPainter(
+            textAlign: opening.labelAlign ?? TextAlign.center,
+            text: TextSpan(
+              text: opening.label!,
+              style: opening.labelStyle ??
+                  const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 10,
+                  ),
+            ),
+            textDirection: TextDirection.ltr,
+          );
+
+          textPainter.layout(maxWidth: openingRadius * 2);
+
+          canvas.save();
+          textPainter.paint(
+            canvas,
+            Offset(
+              opening.offset.dx + openingRadius - textPainter.width / 2,
+              size.height + (opening.labelMargin ?? 0),
+            ),
+          );
+          canvas.restore();
+        }
+      }
+
+      //
+      path.lineTo(size.width, size.height);
+    } else {
+      path.lineTo(size.width, size.height);
+    }
+
+    final rightArcOpenings = block.arcOpenings
+        .where((opening) => opening.offset.dx == size.width)
+        .toList()
+      ..sort((a, b) => b.offset.dy.compareTo(a.offset.dy));
+
+    if (rightArcOpenings.isNotEmpty) {
+      for (final opening in rightArcOpenings) {
+        final openingRadius = opening.radius ?? (schemaSize.opening / 2);
+        path.arcTo(
+          Rect.fromLTWH(
+            size.width - openingRadius,
+            opening.offset.dy -
+                (openingRadius * 2) -
+                (opening.isFullOpening ? 0 : openingRadius / 2),
+            openingRadius * 2,
+            openingRadius * 2,
+          ),
+          pi / 2,
+          opening.isFullOpening ? pi : pi / 2,
+          false,
+        );
+        path.lineTo(
+            size.width,
+            opening.offset.dy -
+                openingRadius -
+                (opening.isFullOpening ? 0 : openingRadius / 2));
+
+        if (opening.label != null) {
+          final textPainter = TextPainter(
+            textAlign: opening.labelAlign ?? TextAlign.center,
+            text: TextSpan(
+              text: opening.label!,
+              style: opening.labelStyle ??
+                  const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 10,
+                  ),
+            ),
+            textDirection: TextDirection.ltr,
+          );
+
+          textPainter.layout(maxWidth: openingRadius * 2);
+
+          canvas.save();
+          canvas.rotate(_getRadFromDeg(-90));
+          canvas.translate(-size.height, 0);
+          textPainter.paint(
+            canvas,
+            Offset(
+              size.height -
+                  opening.offset.dy +
+                  openingRadius -
+                  textPainter.width / 2,
+              size.width + (opening.labelMargin ?? 0),
+            ),
+          );
+          canvas.restore();
+        }
+      }
+
+      path.lineTo(size.width, 0);
+    } else {
+      path.lineTo(size.width, 0);
+    }
+
+    final topArcOpenings = block.arcOpenings
+        .where((opening) => opening.offset.dy == 0)
+        .toList()
+      ..sort((a, b) => b.offset.dx.compareTo(a.offset.dx));
+
+    if (topArcOpenings.isNotEmpty) {
+      for (final opening in topArcOpenings) {
+        final openingRadius = opening.radius ?? (schemaSize.opening / 2);
+        path.arcTo(
+          Rect.fromLTWH(
+            opening.offset.dx - (opening.isFullOpening ? 0 : openingRadius / 2),
+            -openingRadius,
+            openingRadius * 2,
+            openingRadius * 2,
+          ),
+          0,
+          opening.isFullOpening ? pi : pi / 2,
+          false,
+        );
+        path.lineTo(
+            opening.offset.dx -
+                openingRadius +
+                (opening.isFullOpening ? 0 : openingRadius * 1.5),
+            0);
+
+        if (opening.label != null) {
+          final textPainter = TextPainter(
+            textAlign: opening.labelAlign ?? TextAlign.center,
+            text: TextSpan(
+              text: opening.label!,
+              style: opening.labelStyle ??
+                  const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 10,
+                  ),
+            ),
+            textDirection: TextDirection.ltr,
+          );
+
+          textPainter.layout(maxWidth: openingRadius * 2);
+
+          canvas.save();
+          canvas.rotate(_getRadFromDeg(-180));
+          textPainter.paint(
+            canvas,
+            Offset(
+              -(opening.offset.dx + (openingRadius * 2)) +
+                  (openingRadius - textPainter.width / 2),
+              (opening.labelMargin ?? 0),
+            ),
+          );
+          canvas.restore();
+        }
+      }
+      path.lineTo(0, 0);
+    } else {
+      path.lineTo(0, 0);
+    }
+
+    path.close();
+    return path;
   }
 
   /// Generates a path with openings for the block
@@ -230,8 +410,7 @@ class _SchemaBlockPainter extends CustomPainter {
           path.moveTo(
               bottomEdgeOpenings[i].offset.dx -
                   horizontalPaddingFactor +
-                  (bottomEdgeOpenings[i].openingSize ??
-                      schemaSize.opening),
+                  (bottomEdgeOpenings[i].openingSize ?? schemaSize.opening),
               size.height);
         }
         path.lineTo(size.width, size.height);

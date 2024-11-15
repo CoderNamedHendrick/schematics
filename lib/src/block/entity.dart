@@ -74,6 +74,70 @@ typedef BlockOpening = ({
   double? openingSize
 });
 
+/// Represents an opening with an arc in a block,
+class BlockArcOpening {
+  /// Position of the arc opening.
+  final Offset offset;
+
+  /// Radius of the arc opening. if radius is null, it defaults to the schema opening size.
+  final double? radius;
+
+  /// Indicates if the arc opening is a full opening.
+  final bool isFullOpening;
+
+  /// Label for the arc opening.
+  final String? label;
+
+  /// Style for the label text.
+  final TextStyle? labelStyle;
+
+  /// Alignment for the label text.
+  final TextAlign? labelAlign;
+
+  /// Margin for the label text.
+  final double? labelMargin;
+
+  const BlockArcOpening({
+    required this.offset,
+    required this.radius,
+    required this.isFullOpening,
+    required this.label,
+    required this.labelStyle,
+    required this.labelAlign,
+    this.labelMargin,
+  });
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is BlockArcOpening &&
+        other.offset == offset &&
+        other.radius == radius &&
+        other.isFullOpening == isFullOpening &&
+        other.label == label &&
+        other.labelStyle == labelStyle &&
+        other.labelAlign == labelAlign &&
+        other.labelMargin == labelMargin;
+  }
+
+  @override
+  int get hashCode {
+    return offset.hashCode ^
+        radius.hashCode ^
+        isFullOpening.hashCode ^
+        label.hashCode ^
+        labelStyle.hashCode ^
+        labelAlign.hashCode ^
+        labelMargin.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'BlockArcOpening(offset: $offset, radius: $radius, isFullOpening: $isFullOpening, label: $label, labelStyle: $labelStyle labelAlign: $labelAlign, labelMargin: $labelMargin)';
+  }
+}
+
 /// [Block] represents a schematic block with specific dimensions, color, and optional labels.
 /// where type[T] is the unique identifier for the block.
 final class Block<T extends Object> {
@@ -90,15 +154,6 @@ final class Block<T extends Object> {
   /// Determines which sides of the block's border should be hidden.
   final HideFenceBorder fenceBorder;
 
-  /// An optional label for the entrance of the block.
-  final String? entranceLabel;
-
-  /// The style for the entrance label text.
-  final TextStyle? entranceLabelStyle;
-
-  /// Entrance opening radius
-  final double? entranceOpeningRadius;
-
   /// The label for the block.
   final String? label;
 
@@ -114,44 +169,61 @@ final class Block<T extends Object> {
   /// A list of openings in the block.
   final List<BlockOpening> _openings;
 
+  /// List of arc openings within the block.
+  final List<BlockArcOpening> arcOpenings;
+
   /// The alignment of the block relative to the previous block.
   final BlockAlignment? alignmentToPreviousBlock;
+
+  /// The stroke width for the fence border.
+  final double fenceStrokeWidth;
 
   const Block({
     this.identifier,
     this.width = 100,
     this.height = 100,
     this.fenceBorder = HideFenceBorder.none,
-    this.entranceLabel,
-    this.entranceLabelStyle,
     this.label,
     this.labelStyle,
     this.color = Colors.purpleAccent,
     this.position,
     List<BlockOpening> openings = const [],
     this.alignmentToPreviousBlock,
-    this.entranceOpeningRadius,
+    this.arcOpenings = const [],
+    this.fenceStrokeWidth = 1.5,
   }) : _openings = openings;
 
-  List<BlockOpening> get effectiveOpenings => [
-        ..._openings,
-        ...?switch (fenceBorder) {
-          HideFenceBorder.right => [
-              Offset(width, .005).oSize(height),
-            ],
-          HideFenceBorder.left => [
-              // making y not equal zero allows it fall vertically
-              const Offset(0, .001).oSize(height),
-            ],
-          HideFenceBorder.bottom => [
-              Offset(.005, height).oSize(width),
-            ],
-          HideFenceBorder.top => [
-              const Offset(.005, 0).oSize(width),
-            ],
-          _ => null,
-        },
-      ];
+  List<BlockOpening> get effectiveOpenings {
+    final effectiveArcOpenings = arcOpenings.toList()
+      ..removeWhere((opening) {
+        return switch (fenceBorder) {
+          HideFenceBorder.right => opening.offset.dx == width,
+          HideFenceBorder.left => opening.offset.dx == 0,
+          HideFenceBorder.bottom => opening.offset.dy == height,
+          HideFenceBorder.top => opening.offset.dy == 0,
+          _ => false,
+        };
+      });
+    final fenceOpenings = switch (fenceBorder) {
+      HideFenceBorder.right => Offset(width, .001).oSize(height),
+      // making y not equal zero allows it fall vertically
+      HideFenceBorder.left => const Offset(0, .001).oSize(height),
+      HideFenceBorder.bottom => Offset(.001, height).oSize(width),
+      HideFenceBorder.top => const Offset(.001, 0).oSize(width),
+      _ => null,
+    };
+    return [
+      ..._openings,
+      if (fenceOpenings != null) fenceOpenings,
+      ...effectiveArcOpenings.map((opening) {
+        if (opening.radius != null) {
+          return opening.offset.oSize(opening.radius! * 2);
+        } else {
+          return opening.offset.opening;
+        }
+      }),
+    ];
+  }
 
   List<BlockOpening> get openings => _openings.toList();
 
@@ -164,15 +236,14 @@ final class Block<T extends Object> {
         other.width == width &&
         other.height == height &&
         other.fenceBorder == fenceBorder &&
-        other.entranceLabel == entranceLabel &&
-        other.entranceLabelStyle == entranceLabelStyle &&
         other.label == label &&
         other.labelStyle == labelStyle &&
         other.color == color &&
         other.position == position &&
-        other.entranceOpeningRadius == entranceOpeningRadius &&
         listEquals(other._openings, _openings) &&
-        other.alignmentToPreviousBlock == alignmentToPreviousBlock;
+        listEquals(other.arcOpenings, arcOpenings) &&
+        other.alignmentToPreviousBlock == alignmentToPreviousBlock &&
+        other.fenceStrokeWidth == fenceStrokeWidth;
   }
 
   @override
@@ -181,19 +252,18 @@ final class Block<T extends Object> {
         width.hashCode ^
         height.hashCode ^
         fenceBorder.hashCode ^
-        entranceLabel.hashCode ^
-        entranceLabelStyle.hashCode ^
         label.hashCode ^
         labelStyle.hashCode ^
         color.hashCode ^
         position.hashCode ^
-        entranceOpeningRadius.hashCode ^
         _openings.hashCode ^
-        alignmentToPreviousBlock.hashCode;
+        arcOpenings.hashCode ^
+        alignmentToPreviousBlock.hashCode ^
+        fenceStrokeWidth.hashCode;
   }
 
   @override
   String toString() {
-    return 'Block(identifier: $identifier, width: $width, height: $height, fence: $fenceBorder, entranceLabel: $entranceLabel, entranceLabelStyle: $entranceLabelStyle, entranceOpeningRadius: $entranceOpeningRadius, label: $label, labelStyle: $labelStyle, blockColor: $color, position: $position, openings: $effectiveOpenings, alignment: $alignmentToPreviousBlock)';
+    return 'Block(identifier: $identifier, width: $width, height: $height, fence: $fenceBorder, label: $label, labelStyle: $labelStyle, blockColor: $color, position: $position, openings: $effectiveOpenings, arcOpenings: $arcOpenings, alignment: $alignmentToPreviousBlock, fenceStrokeWidth: $fenceStrokeWidth)';
   }
 }

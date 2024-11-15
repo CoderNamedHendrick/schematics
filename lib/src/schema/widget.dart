@@ -325,18 +325,15 @@ extension on Block {
       width: width * axesScale.x,
       height: height * axesScale.y,
       fenceBorder: fenceBorder,
-      entranceLabel: entranceLabel,
-      entranceLabelStyle: entranceLabelStyle,
-      entranceOpeningRadius: entranceOpeningRadius != null
-          ? entranceOpeningRadius! * axesScale.opening
-          : null,
       labelStyle: labelStyle,
       color: color,
       position: position != null
-          ? Offset(
-              position!.dx * axesScale.x, position!.dy * axesScale.y)
+          ? Offset(position!.dx * axesScale.x, position!.dy * axesScale.y)
           : null,
       openings: openings.alignedOpenings(axesScale),
+      arcOpenings: arcOpenings
+          .map((arcOpening) => arcOpening.alignedArcOpening(axesScale))
+          .toList(),
       alignmentToPreviousBlock: alignmentToPreviousBlock,
     );
   }
@@ -365,10 +362,29 @@ extension on BlockOpening {
   /// - Returns: A new [BlockOpening] with the adjusted offset and opening size.
   BlockOpening alignedOpening(AxesScale axesScale) {
     return (
-      offset:
-          Offset(offset.dx * axesScale.x, offset.dy * axesScale.y),
+      offset: Offset(offset.dx * axesScale.x, offset.dy * axesScale.y),
       openingSize:
           openingSize != null ? openingSize! * axesScale.opening : null,
+    );
+  }
+}
+
+extension on BlockArcOpening {
+  /// Aligns the [BlockArcOpening] based on the provided [AxesScale].
+  ///
+  /// This function adjusts the offset and radius of the [BlockArcOpening]
+  /// according to the scaling factors defined in the [AxesScale].
+  ///
+  /// - Parameter axesScale: The scaling factors for the x, y, and opening dimensions.
+  /// - Returns: A new [BlockArcOpening] with the adjusted offset and radius.
+  BlockArcOpening alignedArcOpening(AxesScale axesScale) {
+    return BlockArcOpening(
+      offset: Offset(offset.dx * axesScale.x, offset.dy * axesScale.y),
+      radius: radius != null ? radius! * axesScale.opening : null,
+      isFullOpening: isFullOpening,
+      label: label,
+      labelStyle: labelStyle,
+      labelAlign: labelAlign,
     );
   }
 }
