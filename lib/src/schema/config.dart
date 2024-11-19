@@ -14,7 +14,7 @@ AxesScale _kDefaultAxesScaleCallback([_]) => kDefaultAxesScale;
 /// This class holds various configuration options for the schema, such as
 /// the size of the schema, whether to show the grid and blocks, and the
 /// layout direction.
-final class SchemaConfig {
+final class SchemaConfiguration {
   /// The size of the schema.
   final SchemaSize size;
 
@@ -36,7 +36,7 @@ final class SchemaConfig {
   /// The [showGrid] parameter specifies whether to show the grid.
   /// The [showBlocks] parameter specifies whether to show the blocks.
   /// The [layoutDirection] parameter specifies the direction of the layout.
-  const SchemaConfig({
+  const SchemaConfiguration({
     this.size = kDefaultSchemaSize,
     this.showGrid = false,
     this.showBlocks = false,
@@ -51,7 +51,7 @@ final class SchemaConfig {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is SchemaConfig &&
+    return other is SchemaConfiguration &&
         other.size == size &&
         other.showGrid == showGrid &&
         other.showBlocks == showBlocks &&

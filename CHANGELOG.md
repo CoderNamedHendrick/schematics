@@ -1,3 +1,11 @@
+## 1.0.0
+
+- Stable release
+- README update
+- breaking changes:
+    - renamed SchemaWidget to Schema
+    - renamed SchemaConfig to SchemaConfiguration
+
 ## 1.0.0-dev.1.8
 
 - removed entranceLabel, entranceLabelStyle, entranceLabelRadius from `Block` class, use arc openings instead.

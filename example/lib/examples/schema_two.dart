@@ -7,8 +7,8 @@ class SchemaTwo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SchemaWidget(
-      config: SchemaConfig(
+    return Schema(
+      config: SchemaConfiguration(
         layoutDirection: LayoutDirection.topLeft,
         size: SchemaSize(cell: kDefaultSchemaSize.cell, opening: 25),
         showBlocks: showBlockAreas.value,

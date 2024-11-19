@@ -24,24 +24,24 @@ typedef GridCallback = void Function(Grid<int> grid);
 ///
 /// This widget is responsible for rendering the blocks passed to it. It also allows
 /// the client to set the axes scales, the size of the schema, and various other parameters.
-class SchemaWidget extends StatelessWidget {
-  /// Creates a [SchemaWidget].
+class Schema extends StatelessWidget {
+  /// Creates a [Schema].
   ///
-  /// - [config]: Configuration for the schema. Defaults to [SchemaConfig].
+  /// - [config]: Configuration for the schema. Defaults to [SchemaConfiguration].
   /// - [blocks]: The list of blocks to display in the schema.
   /// - [onBlocksLayout]: Callback for when the blocks are laid out.
   /// - [onGridUpdate]: Callback for when the grid is updated.
   /// - [onInitiateAxesScale]: Callback for initiating the axes scale. Defaults to [_kDefaultAxesScaleCallback].
-  const SchemaWidget({
+  const Schema({
     super.key,
-    this.config = const SchemaConfig(),
+    this.config = const SchemaConfiguration(),
     required this.blocks,
     this.onBlocksLayout,
     this.onGridUpdate,
   });
 
   /// Configuration for the schema.
-  final SchemaConfig config;
+  final SchemaConfiguration config;
 
   /// The list of blocks to display in the schema.
   final List<Block> blocks;

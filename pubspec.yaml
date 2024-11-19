@@ -1,5 +1,5 @@
 name: schematics
-version: 1.0.0-dev.1.8
+version: 1.0.0
 homepage: https://github.com/CoderNamedHendrick/schematics
 repository: https://github.com/CoderNamedHendrick/schematics
 issue_tracker: https://github.com/CoderNamedHendrick/schematics/issues
@@ -10,7 +10,7 @@ topics:
   - maps
   - floor-plan
 
-description: 'Draw 2d schematics diagrams'
+description: 'The schematics package is a Flutter package for drawing 2D diagrams, maps, and floor plans with customizable blocks, entrances, and openings, supporting interactive schematic diagrams.'
 
 screenshots:
   - description: 'schematic diagram on mobile'

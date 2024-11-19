@@ -7,8 +7,8 @@ class SchemaThree extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SchemaWidget(
-      config: SchemaConfig(
+    return Schema(
+      config: SchemaConfiguration(
         showBlocks: showBlockAreas.value,
         showGrid: showGridCells.value,
         initiateAxesScale: (constraints) => AxesScale(

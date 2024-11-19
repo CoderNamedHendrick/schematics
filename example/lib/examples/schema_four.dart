@@ -10,8 +10,8 @@ class SchemaFour extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       final largeRoomHeight = constraints.maxHeight * 0.200;
       final mediumRoomHeight = constraints.maxHeight * 0.09;
-      return SchemaWidget(
-        config: SchemaConfig(
+      return Schema(
+        config: SchemaConfiguration(
           layoutDirection: LayoutDirection.bottomRight,
           showBlocks: showBlockAreas.value,
           showGrid: showGridCells.value,
