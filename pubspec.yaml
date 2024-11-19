@@ -10,7 +10,7 @@ topics:
   - maps
   - floor-plan
 
-description: 'The schematics package is a Flutter package for drawing 2D diagrams, maps, and floor plans with customizable blocks, entrances, and openings, supporting interactive schematic diagrams.'
+description: 'The schematics package is a Flutter tool for creating 2D diagrams, maps, and floor plans with customizable blocks, entrances, and openings, supporting interactive diagrams.'
 
 screenshots:
   - description: 'schematic diagram on mobile'
