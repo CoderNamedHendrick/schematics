@@ -103,8 +103,7 @@ Refer to example project [here](https://github.com/CoderNamedHendrick/schematics
 
 > [!NOTE]
 > For more real-world example, check-out the 2024 Lagos Devfest
->
-application [here](https://github.com/GDG-W/cave/blob/dev/packages/conferenceapp/lib/src/features/more/presentation/screens/venue_map.dart)
+> application [here](https://github.com/GDG-W/cave/blob/dev/packages/conferenceapp/lib/src/features/more/presentation/screens/venue_map.dart)
 
 ## Installation
 
