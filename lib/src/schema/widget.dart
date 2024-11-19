@@ -361,6 +361,8 @@ extension on BlockArcOpening {
       label: label,
       labelStyle: labelStyle,
       labelAlign: labelAlign,
+      labelMargin: labelMargin,
+      allowTextOverflow: allowTextOverflow,
     );
   }
 }

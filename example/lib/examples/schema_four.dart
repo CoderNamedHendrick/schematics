@@ -48,8 +48,8 @@ class SchemaFour extends StatelessWidget {
             ],
             arcOpenings: [
               Offset(constraints.maxWidth, largeRoomHeight / 2 + 45)
-                  .arcSize(45)
-                  .withLabel('ENTRANCE'),
+                  .arcSize(20)
+                  .withLabel('ENTRANCE', allowTextOverflow: true),
             ],
           ),
           Block(

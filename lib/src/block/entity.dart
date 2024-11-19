@@ -97,6 +97,9 @@ class BlockArcOpening {
   /// Margin for the label text.
   final double? labelMargin;
 
+  /// Allow text paint over the boundaries of the opening
+  final bool allowTextOverflow;
+
   const BlockArcOpening({
     required this.offset,
     required this.radius,
@@ -104,7 +107,8 @@ class BlockArcOpening {
     required this.label,
     required this.labelStyle,
     required this.labelAlign,
-    this.labelMargin,
+    required this.labelMargin,
+    this.allowTextOverflow = false,
   });
 
   @override
@@ -118,7 +122,8 @@ class BlockArcOpening {
         other.label == label &&
         other.labelStyle == labelStyle &&
         other.labelAlign == labelAlign &&
-        other.labelMargin == labelMargin;
+        other.labelMargin == labelMargin &&
+        other.allowTextOverflow == allowTextOverflow;
   }
 
   @override
@@ -129,7 +134,8 @@ class BlockArcOpening {
         label.hashCode ^
         labelStyle.hashCode ^
         labelAlign.hashCode ^
-        labelMargin.hashCode;
+        labelMargin.hashCode ^
+        allowTextOverflow.hashCode;
   }
 
   @override

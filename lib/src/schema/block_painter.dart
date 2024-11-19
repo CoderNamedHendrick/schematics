@@ -141,21 +141,7 @@ class _SchemaBlockPainter extends CustomPainter {
         );
 
         if (opening.label != null) {
-          final textPainter = TextPainter(
-            textAlign: opening.labelAlign ?? TextAlign.center,
-            text: TextSpan(
-              text: opening.label!,
-              style: opening.labelStyle ??
-                  const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 10,
-                  ),
-            ),
-            textDirection: TextDirection.ltr,
-          );
-
-          textPainter.layout(maxWidth: openingRadius * 2);
+          final textPainter = _getTextPainter(opening, openingRadius);
 
           canvas.save();
           canvas.rotate(_getRadFromDeg(90));
@@ -201,21 +187,7 @@ class _SchemaBlockPainter extends CustomPainter {
             size.height);
 
         if (opening.label != null) {
-          final textPainter = TextPainter(
-            textAlign: opening.labelAlign ?? TextAlign.center,
-            text: TextSpan(
-              text: opening.label!,
-              style: opening.labelStyle ??
-                  const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 10,
-                  ),
-            ),
-            textDirection: TextDirection.ltr,
-          );
-
-          textPainter.layout(maxWidth: openingRadius * 2);
+          final textPainter = _getTextPainter(opening, openingRadius);
 
           canvas.save();
           textPainter.paint(
@@ -263,21 +235,7 @@ class _SchemaBlockPainter extends CustomPainter {
                 (opening.isFullOpening ? 0 : openingRadius / 2));
 
         if (opening.label != null) {
-          final textPainter = TextPainter(
-            textAlign: opening.labelAlign ?? TextAlign.center,
-            text: TextSpan(
-              text: opening.label!,
-              style: opening.labelStyle ??
-                  const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 10,
-                  ),
-            ),
-            textDirection: TextDirection.ltr,
-          );
-
-          textPainter.layout(maxWidth: openingRadius * 2);
+          final textPainter = _getTextPainter(opening, openingRadius);
 
           canvas.save();
           canvas.rotate(_getRadFromDeg(-90));
@@ -327,21 +285,7 @@ class _SchemaBlockPainter extends CustomPainter {
             0);
 
         if (opening.label != null) {
-          final textPainter = TextPainter(
-            textAlign: opening.labelAlign ?? TextAlign.center,
-            text: TextSpan(
-              text: opening.label!,
-              style: opening.labelStyle ??
-                  const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 10,
-                  ),
-            ),
-            textDirection: TextDirection.ltr,
-          );
-
-          textPainter.layout(maxWidth: openingRadius * 2);
+          final textPainter = _getTextPainter(opening, openingRadius);
 
           canvas.save();
           canvas.rotate(_getRadFromDeg(-180));
@@ -478,6 +422,32 @@ class _SchemaBlockPainter extends CustomPainter {
     }
 
     return path;
+  }
+
+  TextPainter _getTextPainter(
+      final BlockArcOpening opening, final double openingRadius) {
+    final textPainter = TextPainter(
+      textAlign: opening.labelAlign ?? TextAlign.center,
+      text: TextSpan(
+        text: opening.label!,
+        style: opening.labelStyle ??
+            const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+              fontSize: 10,
+            ),
+      ),
+      textDirection: TextDirection.ltr,
+    );
+
+    if (opening.allowTextOverflow) {
+      textPainter.maxLines = 1;
+      textPainter.layout();
+    } else {
+      textPainter.layout(maxWidth: openingRadius * 2);
+    }
+
+    return textPainter;
   }
 
   @override

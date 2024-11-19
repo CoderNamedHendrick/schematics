@@ -114,6 +114,7 @@ extension BlockOffsetUtilsX on Offset {
         label: null,
         labelStyle: null,
         labelAlign: null,
+        labelMargin: null,
       );
 
   BlockArcOpening arcSize(double radius) => BlockArcOpening(
@@ -123,12 +124,18 @@ extension BlockOffsetUtilsX on Offset {
         label: null,
         labelStyle: null,
         labelAlign: null,
+        labelMargin: null,
       );
 }
 
 extension BlockArcUtilsX on BlockArcOpening {
-  BlockArcOpening withLabel(String labelText,
-          {TextStyle? style, TextAlign? textAlign}) =>
+  BlockArcOpening withLabel(
+    String labelText, {
+    TextStyle? style,
+    TextAlign? textAlign,
+    bool allowTextOverflow = false,
+    double? labelMargin,
+  }) =>
       BlockArcOpening(
         offset: offset,
         radius: radius,
@@ -136,6 +143,8 @@ extension BlockArcUtilsX on BlockArcOpening {
         label: labelText,
         labelStyle: style,
         labelAlign: textAlign,
+        allowTextOverflow: allowTextOverflow,
+        labelMargin: labelMargin,
       );
 
   BlockArcOpening withRadius(double arcRadius) => BlockArcOpening(
@@ -145,6 +154,7 @@ extension BlockArcUtilsX on BlockArcOpening {
         label: label,
         labelStyle: labelStyle,
         labelAlign: labelAlign,
+        labelMargin: labelMargin,
       );
 
   BlockArcOpening withFullOpening(bool isFullOpening) => BlockArcOpening(
@@ -154,5 +164,6 @@ extension BlockArcUtilsX on BlockArcOpening {
         label: label,
         labelStyle: labelStyle,
         labelAlign: labelAlign,
+        labelMargin: labelMargin,
       );
 }
