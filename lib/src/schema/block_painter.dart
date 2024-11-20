@@ -13,15 +13,6 @@ class _SchemaBlockPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    _drawBlock(canvas, size);
-  }
-
-  /// Draws the block on the canvas.
-  void _drawBlock(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = block.color
-      ..style = PaintingStyle.fill;
-
     assert(() {
       final openingPositionAligned = () {
         return block.effectiveOpenings
@@ -43,11 +34,20 @@ class _SchemaBlockPainter extends CustomPainter {
 
       if (!openingPositionAligned) {
         throw FlutterError(
-          'Opening position must be aligned correctly at the edges of the block',
+          'Opening positions must be aligned correctly at the edges of the block',
         );
       }
       return openingPositionAligned;
     }());
+
+    _drawBlock(canvas, size);
+  }
+
+  /// Draws the block on the canvas.
+  void _drawBlock(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = block.color
+      ..style = PaintingStyle.fill;
 
     // paint inside
     Path path = _blockPathWithArcs(block.arcOpenings, size, canvas);
@@ -75,7 +75,6 @@ class _SchemaBlockPainter extends CustomPainter {
 
     canvas.drawPath(path, paint);
 
-    canvas.save();
     // render block label
     final labelPainter = TextPainter(
       textAlign: block.labelAlign ?? TextAlign.center,
@@ -93,22 +92,17 @@ class _SchemaBlockPainter extends CustomPainter {
 
     labelPainter.layout();
     // render block label
+    late Offset position;
     if (labelPainter.width > size.width) {
-      canvas.rotate(_getRadFromDeg(-90));
-      labelPainter.paint(
-        canvas,
-        Offset(-(size.height + labelPainter.width) / 2,
-            (size.width - labelPainter.height) / 2),
-      );
+      position = Offset(-(size.height + labelPainter.width) / 2,
+          (size.width - labelPainter.height) / 2);
     } else {
-      labelPainter.paint(
-        canvas,
-        Offset((size.width - labelPainter.width) / 2,
-            (size.height - labelPainter.height) / 2),
-      );
+      position = Offset((size.width - labelPainter.width) / 2,
+          (size.height - labelPainter.height) / 2);
     }
 
-    canvas.restore();
+    _paintText(canvas, labelPainter, position,
+        labelPainter.width > size.width ? -90 : null);
   }
 
   Path _blockPathWithArcs(
@@ -143,16 +137,15 @@ class _SchemaBlockPainter extends CustomPainter {
         if (opening.label != null) {
           final textPainter = _getTextPainter(opening, openingRadius);
 
-          canvas.save();
-          canvas.rotate(_getRadFromDeg(90));
-          textPainter.paint(
+          _paintText(
             canvas,
+            textPainter,
             Offset(
               opening.offset.dy + openingRadius - textPainter.width / 2,
               opening.labelMargin ?? 0,
             ),
+            90,
           );
-          canvas.restore();
         }
       }
 
@@ -189,15 +182,15 @@ class _SchemaBlockPainter extends CustomPainter {
         if (opening.label != null) {
           final textPainter = _getTextPainter(opening, openingRadius);
 
-          canvas.save();
-          textPainter.paint(
+          _paintText(
             canvas,
+            textPainter,
             Offset(
               opening.offset.dx + openingRadius - textPainter.width / 2,
               size.height + (opening.labelMargin ?? 0),
             ),
+            null,
           );
-          canvas.restore();
         }
       }
 
@@ -237,11 +230,9 @@ class _SchemaBlockPainter extends CustomPainter {
         if (opening.label != null) {
           final textPainter = _getTextPainter(opening, openingRadius);
 
-          canvas.save();
-          canvas.rotate(_getRadFromDeg(-90));
-          canvas.translate(-size.height, 0);
-          textPainter.paint(
+          _paintText(
             canvas,
+            textPainter,
             Offset(
               size.height -
                   opening.offset.dy +
@@ -249,8 +240,9 @@ class _SchemaBlockPainter extends CustomPainter {
                   textPainter.width / 2,
               size.width + (opening.labelMargin ?? 0),
             ),
+            -90,
+            translate: Offset(-size.height, 0),
           );
-          canvas.restore();
         }
       }
 
@@ -287,17 +279,16 @@ class _SchemaBlockPainter extends CustomPainter {
         if (opening.label != null) {
           final textPainter = _getTextPainter(opening, openingRadius);
 
-          canvas.save();
-          canvas.rotate(_getRadFromDeg(-180));
-          textPainter.paint(
+          _paintText(
             canvas,
+            textPainter,
             Offset(
               -(opening.offset.dx + (openingRadius * 2)) +
                   (openingRadius - textPainter.width / 2),
               (opening.labelMargin ?? 0),
             ),
+            -180,
           );
-          canvas.restore();
         }
       }
       path.lineTo(0, 0);
@@ -448,6 +439,18 @@ class _SchemaBlockPainter extends CustomPainter {
     }
 
     return textPainter;
+  }
+
+  // Paints the text on the canvas using the textPainter at a position given
+  // by the offset with the given angle in degrees.
+  void _paintText(
+      Canvas canvas, TextPainter textPainter, Offset offset, double? angle,
+      {Offset? translate}) {
+    canvas.save();
+    if (angle != null) canvas.rotate(_getRadFromDeg(angle));
+    if (translate != null) canvas.translate(translate.dx, translate.dy);
+    textPainter.paint(canvas, offset);
+    canvas.restore();
   }
 
   @override

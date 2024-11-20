@@ -2,16 +2,18 @@ import 'package:flutter/foundation.dart';
 
 import 'cell.dart';
 
+typedef Vector2D<T extends Object> = List<List<T>>;
+
 /// A generic grid class that holds a 2D list of objects of type [T].
 class Grid<T extends Object> {
   /// The 2D list representing the grid.
-  final List<List<T>> grid;
+  final Vector2D<T> _vector;
 
   /// The initial value for the grid cells.
   final T initialValue;
 
-  /// Private constructor for creating a grid with the given [grid] and [initialValue].
-  const Grid._(this.grid, this.initialValue);
+  /// Private constructor for creating a grid with the given [_vector] and [initialValue].
+  const Grid._(this._vector, this.initialValue);
 
   /// Factory constructor to create a grid with the specified number of [rows] and [columns],
   /// initializing all cells with the [initialValue].
@@ -32,12 +34,17 @@ class Grid<T extends Object> {
 
   /// Returns the number of rows in the grid.
   int get rows {
-    return grid.length;
+    return _vector.length;
   }
 
   /// Returns the number of columns in the grid.
   int get columns {
-    return grid.first.length;
+    return _vector.first.length;
+  }
+
+  /// Returns the _vector
+  Vector2D<T> get vector {
+    return _vector.toList();
   }
 
   /// Returns the count of cells that match the given [filter] function.
@@ -50,9 +57,7 @@ class Grid<T extends Object> {
     List<GridCell> cells = [];
     for (int i = 0; i <= rows - 1; i++) {
       for (int j = 0; j <= columns - 1; j++) {
-        final state = grid[i][j];
-
-        if (filter(state)) cells.add(GridCell(row: i, column: j));
+        if (filter(_vector[i][j])) cells.add(GridCell(row: i, column: j));
       }
     }
     return cells;
@@ -61,27 +66,27 @@ class Grid<T extends Object> {
   /// Resets the specified [cells] to the initial value.
   void resetCells(List<GridCell> cells) {
     for (final cell in cells) {
-      grid[cell.row][cell.column] = initialValue;
+      this[cell] = initialValue;
     }
   }
 
   /// Fills the specified [cells] with the given [state].
   void fillCells(List<GridCell> cells, T state) {
     for (final cell in cells) {
-      grid[cell.row][cell.column] = state;
+      this[cell] = state;
     }
   }
 
   /// Applies the [filter] function to the cell at the given [cell] position.
   bool filter(GridCell cell, bool Function(T state) filter) {
-    return filter(grid[cell.row][cell.column]);
+    return filter(this[cell]);
   }
 
   /// Applies the [filter] function to all the specified [cells].
   /// Returns `true` if all cells match the filter, otherwise `false`.
   bool filterCells(List<GridCell> cells, bool Function(T state) filter) {
     for (final cell in cells) {
-      if (!filter(grid[cell.row][cell.column])) return false;
+      if (!filter(this[cell])) return false;
     }
     return true;
   }
@@ -90,9 +95,7 @@ class Grid<T extends Object> {
   GridCell? firstWhereOrNull(bool Function(T state) predicate) {
     for (int i = 0; i <= rows - 1; i++) {
       for (int j = 0; j <= columns - 1; j++) {
-        final state = grid[i][j];
-
-        if (predicate(state)) return GridCell(row: i, column: j);
+        if (predicate(_vector[i][j])) return GridCell(row: i, column: j);
       }
     }
     return null;
@@ -101,33 +104,12 @@ class Grid<T extends Object> {
   /// Returns a map of neighboring positions for the given [cell].
   /// The keys are `above`, `below`, `left`, and `right`.
   Map<String, GridCell?> getNeighbourPositions(GridCell cell) {
-    final neighbours = <String, GridCell?>{};
-
-    if (validPosition(cell.above)) {
-      neighbours['above'] = cell.above;
-    } else {
-      neighbours['above'] = null;
-    }
-
-    if (validPosition(cell.below)) {
-      neighbours['below'] = cell.below;
-    } else {
-      neighbours['below'] = null;
-    }
-
-    if (validPosition(cell.left)) {
-      neighbours['left'] = cell.left;
-    } else {
-      neighbours['left'] = null;
-    }
-
-    if (validPosition(cell.right)) {
-      neighbours['right'] = cell.right;
-    } else {
-      neighbours['right'] = null;
-    }
-
-    return neighbours;
+    return {
+      'above': validPosition(cell.above) ? cell.above : null,
+      'below': validPosition(cell.below) ? cell.below : null,
+      'left': validPosition(cell.left) ? cell.left : null,
+      'right': validPosition(cell.right) ? cell.right : null,
+    };
   }
 
   /// Checks if the given [cell] position is valid within the grid boundaries.
@@ -138,10 +120,10 @@ class Grid<T extends Object> {
         cell.column < columns;
   }
 
-  /// Creates a copy of the grid with the option to replace the [grid] values.
-  /// If [grid] is provided, it will be used to create the new grid.
-  Grid<T> copyWith({List<List<T>>? grid}) {
-    if (grid != null) {
+  /// Creates a copy of the grid with the option to replace the [vector] values.
+  /// If [vector] is provided, it will be used to create the new grid.
+  Grid<T> copyWith({Vector2D<T>? vector}) {
+    if (vector != null) {
       Grid<T> nextGrid = Grid.make(rows, columns, initialValue);
 
       for (int i = 0; i <= rows - 1; i++) {
@@ -149,7 +131,7 @@ class Grid<T extends Object> {
           // try block to silent fuzzy errors that come from resizing the
           // window
           try {
-            nextGrid.grid[i][j] = grid[i][j];
+            nextGrid._vector[i][j] = vector[i][j];
           } catch (_) {}
         }
       }
@@ -157,16 +139,24 @@ class Grid<T extends Object> {
       return nextGrid;
     }
 
-    return Grid._(grid ?? this.grid, initialValue);
+    return Grid._(vector ?? this._vector, initialValue);
+  }
+
+  T operator [](GridCell cell) {
+    return _vector[cell.row][cell.column];
+  }
+
+  void operator []=(GridCell cell, T value) {
+    _vector[cell.row][cell.column] = value;
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Grid<T> && listEquals(other.grid, grid);
+    return other is Grid<T> && listEquals(other._vector, _vector);
   }
 
   @override
-  int get hashCode => grid.hashCode;
+  int get hashCode => _vector.hashCode;
 }

@@ -60,7 +60,7 @@ class _GridPainter extends CustomPainter {
   void _paintBlocks(Canvas canvas, Size size) {
     for (int i = 0; i < grid.rows; i++) {
       for (int j = 0; j < grid.columns; j++) {
-        final state = grid.grid[i][j];
+        final state = grid[GridCell(row: i, column: j)];
 
         if (state > 0) {
           final yOrigin = 0 + (size.height ~/ grid.rows * i).toDouble();

@@ -193,7 +193,7 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
         widget.layoutConstraints.maxWidth ~/ cellSize,
         0);
 
-    newGrid = newGrid.copyWith(grid: grid.grid.toList());
+    newGrid = newGrid.copyWith(vector: grid.vector);
 
     final startTouchColumn = (area.start.dx / cellSize).floor();
     final endTouchColumn = (area.end.dx / cellSize).floor();
@@ -234,7 +234,8 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
               // window
               try {
                 if (isWithinColumnRange && isWithinRowRange) {
-                  newGrid.grid[i][j] = _getCellStateFromColor(area.blockColor);
+                  newGrid[GridCell(row: i, column: j)] =
+                      _getCellStateFromColor(area.blockColor);
                   continue;
                 }
               } catch (_) {}
@@ -244,7 +245,8 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
           }
         }
 
-        newGrid.grid[i][j] = _getCellStateFromColor(area.blockColor);
+        newGrid[GridCell(row: i, column: j)] =
+            _getCellStateFromColor(area.blockColor);
       }
     }
 
