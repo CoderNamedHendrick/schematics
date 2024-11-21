@@ -18,9 +18,16 @@ typedef BlockLayoutCallback = void Function(List<BlockArea> areas);
 /// Callback function type for grid updates.
 typedef GridCallback = void Function(Grid<int> grid);
 
+/// Block pointer event record
+typedef BlockAreaPointEvent = ({
+  BlockArea blockArea,
+  Offset globalPosition,
+  Offset localPosition
+});
+
 /// Callback function type for block tap.
 typedef BlockAreaVoidCallback = void Function(
-    BlockArea blockArea, Offset position);
+    BlockAreaPointEvent areaPointEvent);
 
 /// A widget that displays a schema with blocks
 /// A widget that displays a schema with blocks.
@@ -185,8 +192,11 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
             id: i,
             child: Listener(
               onPointerDown: widget.onBlockTap != null
-                  ? (event) =>
-                      widget.onBlockTap?.call(blockAreas[i], event.position)
+                  ? (event) => widget.onBlockTap?.call((
+                        blockArea: blockAreas[i],
+                        globalPosition: event.position,
+                        localPosition: event.localPosition,
+                      ))
                   : null,
               child: CustomPaint(
                 painter: _SchemaBlockPainter(

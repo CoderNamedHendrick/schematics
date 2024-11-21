@@ -49,7 +49,7 @@ concepts:
    highlighting different positions on it.
 
 6. **onBlockAreaTap**: The `Schema` widget `onBlockAreaTap` callback returns the tapped block area
-   and global position.
+   and local and global positions of the tap.
 
 ### Example
 

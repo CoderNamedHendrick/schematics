@@ -202,10 +202,10 @@ class _SchemaOneState extends State<SchemaOne> {
             opening: constraints.maxWidth * 0.00188,
           ),
         ),
-        onBlockAreaTap: (area, position) {
+        onBlockAreaTap: (areaPointerEvent) {
           setState(() {
-            _selectedBlockArea = area;
-            _selectedPosition = position;
+            _selectedBlockArea = areaPointerEvent.blockArea;
+            _selectedPosition = areaPointerEvent.globalPosition;
           });
           _blockInfoController.show();
         },
