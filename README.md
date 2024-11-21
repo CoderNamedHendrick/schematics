@@ -20,31 +20,43 @@ A customisable and responsive Flutter widget for creating and displaying schemat
 ## Features
 
 - `2D schematic map/diagram`: Allows you to create and display 2D diagrams, maps, and floor plans.
-  Entrances and openings: You can add entrances and openings to your diagrams, which can be either line openings or arc
+  Entrances and openings: You can add entrances and openings to your diagrams, which can be either
+  line openings or arc
   openings.
-- `2D grid map`: Provides a grid where the schematic is drawn, specifying the areas that are the blocks on the diagram.
+- `2D grid map`: Provides a grid where the schematic is drawn, specifying the areas that are the
+  blocks on the diagram.
 - `Line openings`: Simple straight-line openings that can be added to blocks.
 - `Arc openings`: Curved openings that can be semicircles, sectors, or quarter circles.
 
 ## Usage
 
-To use the `Schema` widget for creating and displaying schematic diagrams, you need to understand the following
+To use the `Schema` widget for creating and displaying schematic diagrams, you need to understand
+the following
 concepts:
 
-1. **Schema**: The `Schema` widget serves as the base for all blocks used in the schematics. It takes a `config`
+1. **Schema**: The `Schema` widget serves as the base for all blocks used in the schematics. It
+   takes a `config`
    parameter, which is a `SchemaConfiguration` object.
 
-2. **Schema Configuration**: The `SchemaConfiguration` object includes properties such as size, axis scale
+2. **Schema Configuration**: The `SchemaConfiguration` object includes properties such as size, axis
+   scale
    initialization, and
    other configurations.
 
-3. **Blocks**: The `Schema` widget takes a list of `Block` objects. Each `Block` has properties like height, width,
+3. **Blocks**: The `Schema` widget takes a list of `Block` objects. Each `Block` has properties like
+   height, width,
    border, fence border, label, label style, position, and stroke width.
 
-4. **Block Layout**: The `Schema` widget also takes an `onBlockLayout` callback, which returns a list of `BlockArea`
+4. **Block Layout**: The `Schema` widget also takes an `onBlockLayout` callback, which returns a
+   list of `BlockArea`
    objects representing all the block areas in the schema.
 
-5. **Grid Update**: The `onGridUpdate` callback returns the updated grid, highlighting different positions on it.
+5. **Grid Update**: The `Schema` widget also takes `onGridUpdate` callback returns the updated grid,
+   highlighting different
+   positions on it.
+
+6. **onBlockAreaTap**: The `Schema` widget `onBlockAreaTap` callback returns the tapped block area
+   and global position.
 
 ### Example
 
@@ -92,6 +104,9 @@ class MyApp extends StatelessWidget {
           onGridUpdate: (grid) {
             // handle grid update
           },
+          onBlockAreaTap: (blockArea, globalPosition) {
+            // handle block area tap
+          },
         ),
       ),
     );
@@ -103,7 +118,8 @@ Refer to example project [here](https://github.com/CoderNamedHendrick/schematics
 
 > [!NOTE]
 > For more real-world example, check-out the 2024 Lagos Devfest
-> application [here](https://github.com/GDG-W/cave/blob/dev/packages/conferenceapp/lib/src/features/more/presentation/screens/venue_map.dart)
+>
+application [here](https://github.com/GDG-W/cave/blob/dev/packages/conferenceapp/lib/src/features/more/presentation/screens/venue_map.dart)
 
 ## Installation
 
