@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
           onGridUpdate: (grid) {
             // handle grid update
           },
-          onBlockAreaTap: (blockArea, globalPosition) {
+          onBlockAreaTap: (blockAreaTapEvent) {
             // handle block area tap
           },
         ),

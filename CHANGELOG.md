@@ -1,3 +1,9 @@
+## 1.0.3
+
+- internal improvements
+- added onBlockTap to Schema to communicate taps on block areas, this returns
+  block area tap event which includes the `BlockArea` and a global and local position.
+
 ## 1.0.2
 
 - allow label overflow for arc entrance
