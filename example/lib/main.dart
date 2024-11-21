@@ -176,6 +176,7 @@ class _SchemaOneState extends State<SchemaOne> {
                 _blockInfoController.hide();
                 setState(() {
                   _selectedBlockArea = null;
+                  _selectedPosition = null;
                 });
               },
               child: ColoredBox(
