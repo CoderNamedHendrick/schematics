@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:schematics/src/schema/config.dart';
@@ -19,6 +18,10 @@ typedef BlockLayoutCallback = void Function(List<BlockArea> areas);
 /// Callback function type for grid updates.
 typedef GridCallback = void Function(Grid<int> grid);
 
+/// Callback function type for block tap.
+typedef BlockAreaVoidCallback = void Function(
+    BlockArea blockArea, Offset position);
+
 /// A widget that displays a schema with blocks
 /// A widget that displays a schema with blocks.
 ///
@@ -31,13 +34,15 @@ class Schema extends StatelessWidget {
   /// - [blocks]: The list of blocks to display in the schema.
   /// - [onBlocksLayout]: Callback for when the blocks are laid out.
   /// - [onGridUpdate]: Callback for when the grid is updated.
-  /// - [onInitiateAxesScale]: Callback for initiating the axes scale. Defaults to [_kDefaultAxesScaleCallback].
+  /// - [onBlockAreaTap]: Callback for when a block is tapped. This callback returns
+  /// the [BlockArea] that was tapped and the global position of the tap.
   const Schema({
     super.key,
     this.config = const SchemaConfiguration(),
     required this.blocks,
     this.onBlocksLayout,
     this.onGridUpdate,
+    this.onBlockAreaTap,
   });
 
   /// Configuration for the schema.
@@ -51,6 +56,9 @@ class Schema extends StatelessWidget {
 
   /// Callback for when the grid is updated.
   final GridCallback? onGridUpdate;
+
+  /// Callback for when a block is tapped.
+  final BlockAreaVoidCallback? onBlockAreaTap;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +74,7 @@ class Schema extends StatelessWidget {
           showGrid: config.showGrid,
           showBlocks: config.showBlocks,
           layoutDirection: config.layoutDirection,
+          onBlockTap: onBlockAreaTap,
         );
       },
     );
@@ -83,6 +92,7 @@ class _SchemaWidget extends StatefulWidget {
     required this.showBlocks,
     required this.layoutDirection,
     required this.axesScale,
+    required this.onBlockTap,
   });
 
   final List<Block> blocks;
@@ -94,6 +104,7 @@ class _SchemaWidget extends StatefulWidget {
   final bool showBlocks;
   final LayoutDirection layoutDirection;
   final AxesScale axesScale;
+  final BlockAreaVoidCallback? onBlockTap;
 
   @override
   State<_SchemaWidget> createState() => _SchemaWidgetState();
@@ -101,6 +112,7 @@ class _SchemaWidget extends StatefulWidget {
 
 class _SchemaWidgetState extends State<_SchemaWidget> {
   late List<Block> alignedBlocks;
+  late List<BlockArea> blockAreas;
   late SchemaSize alignedSchemaSize;
   late Grid<int> grid = Grid.make(
     widget.layoutConstraints.maxHeight ~/ alignedSchemaSize.cell,
@@ -160,6 +172,7 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
           layoutDirection: widget.layoutDirection,
           onBlocksLayout: (areas) {
             // send a copy of the areas list
+            blockAreas = areas.toList();
             widget.onBlocksLayout?.call(areas.toList());
             WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((_) {
               areas.forEach(_fillBlock);
@@ -170,10 +183,16 @@ class _SchemaWidgetState extends State<_SchemaWidget> {
           alignedBlocks.length,
           (i) => LayoutId(
             id: i,
-            child: CustomPaint(
-              painter: _SchemaBlockPainter(
-                block: alignedBlocks[i],
-                schemaSize: alignedSchemaSize,
+            child: Listener(
+              onPointerDown: widget.onBlockTap != null
+                  ? (event) =>
+                      widget.onBlockTap?.call(blockAreas[i], event.position)
+                  : null,
+              child: CustomPaint(
+                painter: _SchemaBlockPainter(
+                  block: alignedBlocks[i],
+                  schemaSize: alignedSchemaSize,
+                ),
               ),
             ),
           ),
